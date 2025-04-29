@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows UI - My Computer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background: url('https://wallpaperaccess.com/full/187161.jpg') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        
+        .window {
+            width: 60%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .window.show {
+            display: block;
+            opacity: 1;
+        }
+        .window.hide {
+            opacity: 0;
+            transform: translateX(-50%) scale(0.9);
+        }
+        .title-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            cursor: grab;
+        }
+        .window-controls {
+            display: flex;
+            gap: 10px;
+        }
+        .window-controls i {
+            cursor: pointer;
+            padding: 5px;
+        }
+        .content {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+        .text {
+            flex: 1;
+            padding: 20px;
+        }
+        .text h1 {
+            font-size: 2em;
+            color: #00aaff;
+        }
+        .text p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        .image {
+            flex: 1;
+            text-align: center;
+        }
+        .image img {
+            width: 80%;
+            border-radius: 10px;
+        }
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+        }
+        .taskbar-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .start-btn {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .taskbar-icons {
+            display: flex;
+            gap: 15px;
+            flex-grow: 1;
+            justify-content: center;
+        }
+        .taskbar-icons i {
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        .time {
+            color: white;
+            font-size: 1em;
+            justify-content: flex-end;
+        }
+        .start-menu {
+            position: fixed;
+            bottom: 60px;
+            left: 20px;
+            width: 250px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 15px;
+            display: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .start-menu.show {
+            display: block;
+        }
+        .start-menu h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+        .start-menu .menu-item {
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .start-menu .menu-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        /* Chatbot Button */
+        .chatbot-btn {
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: #0078D7;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Chatbot Window */
+        .chatbot-window {
+            position: fixed;
+            bottom: 130px;
+            right: 20px;
+            width: 300px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .chatbot-window.show {
+            display: flex;
+        }
+
+        .chatbot-header {
+            background: #0078D7;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .chatbot-header i {
+            cursor: pointer;
+        }
+
+        .chatbot-messages {
+            padding: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chatbot-msg {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px;
+            border-radius: 10px;
+            margin: 5px 0;
+            max-width: 80%;
+        }
+
+        .chatbot-msg.user {
+            align-self: flex-end;
+            background: #0078D7;
+        }
+
+        .chatbot-msg.bot {
+            align-self: flex-start;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .chatbot-input button {
+            background: #0078D7;
+            color: white;
+            border: none;
+            padding: 8px;
+            margin-left: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Windows Start Menu -->
+    <div class="start-menu" id="startMenu">
+        <h3>Start Menu</h3>
+        <div class="menu-item" onclick="toggleWindow('aboutMeWindow')">
+            <i class="fa-solid fa-user"></i> About Me
+        </div>
+        <div class="menu-item" onclick="toggleWindow('contactMeWindow')">
+            <i class="fa-solid fa-envelope"></i> Contact Me
+        </div>
+        <div class="menu-item" onclick="toggleWindow('myProjectsWindow')">
+            <i class="fa-solid fa-folder-open"></i> My Projects
+        </div>
+        <div class="menu-item" onclick="toggleWindow('browserWindow')">
+            <i class="fa-brands fa-chrome" title="Browser"></i>Browser
+        </div>
+    </div>
+
+    <!-- Window -->
+    <div class="window" id="aboutMeWindow">
+        <div class="title-bar">
+            <span>About Me</span>
+            <div class="window-controls">
+                <i class="fa-solid fa-xmark" onclick="toggleWindow('aboutMeWindow')"></i>
+            </div>
+        </div>
+        <div class="content">
+            <div class="text">
+                <h1>About Me</h1>
+                <p>Hello! I'm krithik currently a B.Tech student (Computer Science) </p>
+                <p>so i have interest in many sectors like CS, AI, Game develpoment and more...</p>
+            </div>
+            <div class="image">
+                <img src="profile.jpg" alt="Profile Image">
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Button -->
+<div class="chatbot-btn" onclick="toggleChatbot()">
+    <i class="fa-solid fa-robot"></i>
+</div>
+
+
+<!-- Chatbot Window -->
+<div class="chatbot-window" id="chatbotWindow">
+    <div class="chatbot-header">
+        <span>Chat Assistant</span>
+        <i class="fa-solid fa-xmark" onclick="toggleChatbot()"></i>
+    </div>
+    <div class="chatbot-messages" id="chatbotMessages">
+        <div class="chatbot-msg bot">Hello! How can I assist you today?</div>
+    </div>
+    <div class="chatbot-input">
+        <input type="text" id="chatbotInput" placeholder="Type a message..." onkeypress="handleChat(event)">
+        <button onclick="sendChat()"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+</div>
+
+
+    <!-- Contact Me Window -->
+    <div class="window" id="contactMeWindow">
+        <div class="title-bar">
+            <span>Contact Me</span>
+            <div class="window-controls">
+                <i class="fa-solid fa-xmark" onclick="toggleWindow('contactMeWindow')"></i>
+            </div>
+        </div>
+        <div class="content">
+            <div class="text">
+                <h1>Contact Me</h1>
+                <p>Email: 2002.krithik@gmail.com</p>
+                <p>LinkedIn: linkedin.com/in/myprofile</p>
+                <p>GitHub: github.com/myusername</p>
+            </div>
+        </div>
+    </div>
+
+<!-- Browser Window -->
+<div id="browserWindow" class="window">
+    <div class="window-header">
+      <span class="title">My Browser</span>
+      <div class="window-controls">
+        <button onclick="toggleWindow('browserWindow')">✖</button>
+      </div>
+    </div>
+  
+    <div class="browser-address-bar">
+      <span class="address">https://myportfolio.local</span>
+    </div>
+  
+    <div class="window-body">
+      <iframe src="https://example.com" class="browser-iframe"></iframe>
+    </div>
+</div>
+  
+  
+
+    <!-- My Projects Window -->
+<div class="window" id="myProjectsWindow">
+    <div class="title-bar">
+        <span>My Projects</span>
+        <div class="window-controls">
+            <i class="fa-solid fa-xmark" onclick="toggleWindow('myProjectsWindow')"></i>
+        </div>
+    </div>
+    <div class="content">
+        <div class="text">
+            <h1>My Projects</h1>
+            <div class="projects-container">
+                <div class="project-card">
+                    <h2>3D Portfolio Website</h2>
+                    <p>A fully interactive 3D portfolio using Three.js.</p>
+                    <button onclick="window.open('https://github.com/yourusername/3d-portfolio', '_blank')">View</button>
+                </div>
+                <div class="project-card">
+                    <h2>Interactive UI Designs</h2>
+                    <p>Creative UI/UX designs with smooth animations.</p>
+                    <button onclick="window.open('https://github.com/yourusername/ui-designs', '_blank')">View</button>
+                </div>
+                <div class="project-card">
+                    <h2>Flutter Productivity App</h2>
+                    <p>A Flutter app for tracking daily habits & goals.</p>
+                    <button onclick="window.open('https://github.com/yourusername/flutter-app', '_blank')">View</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add this CSS to style flashcards -->
+<style>
+    .projects-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 15px;
+    }
+    .project-card {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .project-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    .project-card h2 {
+        font-size: 1.2em;
+        color: #00aaff;
+    }
+    .project-card p {
+        font-size: 1em;
+        color: white;
+        margin-bottom: 10px;
+    }
+    .project-card button {
+        background: #00aaff;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .project-card button:hover {
+        background: #0088cc;
+    }
+</style>
+
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <div class="taskbar-container">
+            <div class="start-btn" onclick="toggleStartMenu()">
+                <i class="fa-brands fa-windows"></i>
+            </div>
+            <div class="taskbar-icons">
+                <i class="fa-solid fa-user" onclick="toggleWindow('aboutMeWindow')"></i>
+                <i class="fa-solid fa-envelope" onclick="toggleWindow('contactMeWindow')"></i>
+                <i class="fa-solid fa-folder-open" onclick="toggleWindow('myProjectsWindow')"></i>
+                <i class="fa-brands fa-chrome" onclick="toggleWindow('browserWindow')"></i>
+            </div>
+            <div class="time" id="timeDisplay"></div>
+        </div>
+    </div>    
+
+    
+    <script>
+        function toggleWindow(windowId) {
+            const win = document.getElementById(windowId);
+            win.classList.toggle('show');
+        }
+    
+        function closeWindow(windowId) {
+            document.getElementById(windowId).classList.remove('show');
+        }
+    
+        function toggleStartMenu() {
+            document.getElementById('startMenu').classList.toggle('show');
+        }
+    
+        // Chatbot toggle
+        function toggleChatbot() {
+            document.getElementById('chatbotWindow').classList.toggle('show');
+        }
+    
+        // Send message to chatbot
+        function sendChat() {
+            const input = document.getElementById("chatbotInput");
+            const message = input.value.trim();
+            if (message === "") return;
+    
+            const chatContainer = document.getElementById("chatbotMessages");
+    
+            const userMsg = document.createElement("div");
+            userMsg.className = "chatbot-msg user";
+            userMsg.innerText = message;
+            chatContainer.appendChild(userMsg);
+    
+            input.value = "";
+    
+            setTimeout(() => {
+                const botMsg = document.createElement("div");
+                botMsg.className = "chatbot-msg bot";
+                botMsg.innerText = getBotResponse(message);
+                chatContainer.appendChild(botMsg);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 600);
+        }
+    
+        // Pressing enter triggers sendChat()
+        function handleChat(e) {
+            if (e.key === "Enter") {
+                sendChat();
+            }
+        }
+    
+        // Example bot responses
+        function getBotResponse(msg) {
+            msg = msg.toLowerCase();
+            if (msg.includes("hello")) return "Hi there! 👋";
+            if (msg.includes("projects")) return "Check out the 'My Projects' window!";
+            if (msg.includes("contact")) return "You can reach out via the 'Contact Me' section.";
+            return "I'm here to help! Try asking about projects or contact info.";
+        }
+    
+        // Display current time
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById("timeDisplay").innerText = `${hours}:${minutes}`;
+        }
+
+        function openBrowser() {
+            toggleWindow('browserWindow');
+        }
+
+        // Make windows draggable
+        document.querySelectorAll('.window').forEach(win => {
+            const header = win.querySelector('.window-header');
+            let isDragging = false;
+            let offsetX, offsetY;
+
+            header.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                offsetX = e.clientX - win.offsetLeft;
+                offsetY = e.clientY - win.offsetTop;
+                win.style.zIndex = Date.now(); // Bring to front
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                win.style.left = `${e.clientX - offsetX}px`;
+                win.style.top = `${e.clientY - offsetY}px`;
+            });
+        });
+
+
+    
+        // Update time every 30 seconds
+        updateTime();
+        setInterval(updateTime, 30000);
+    </script>    
+
+</body>
+</html>
