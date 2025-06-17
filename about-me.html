@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows UI - My Computer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background: url('https://wallpaperaccess.com/full/187161.jpg') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        
+        .window {
+            width: 60%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .window.show {
+            display: block;
+            opacity: 1;
+        }
+        .window.hide {
+            opacity: 0;
+            transform: translateX(-50%) scale(0.9);
+        }
+        .title-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            cursor: grab;
+        }
+        .window-controls {
+            display: flex;
+            gap: 10px;
+        }
+        .window-controls i {
+            cursor: pointer;
+            padding: 5px;
+        }
+        .content {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+        .text {
+            flex: 1;
+            padding: 20px;
+        }
+        .text h1 {
+            font-size: 2em;
+            color: #00aaff;
+        }
+        .text p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        .image {
+            flex: 1;
+            text-align: center;
+        }
+        .image img {
+            width: 80%;
+            border-radius: 10px;
+        }
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+        }
+        .taskbar-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .start-btn {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .taskbar-icons {
+            display: flex;
+            gap: 15px;
+            flex-grow: 1;
+            justify-content: center;
+        }
+        .taskbar-icons i {
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        .time {
+            color: white;
+            font-size: 1em;
+            justify-content: flex-end;
+        }
+        .start-menu {
+            position: fixed;
+            bottom: 60px;
+            left: 20px;
+            width: 250px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 15px;
+            display: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .start-menu.show {
+            display: block;
+        }
+        .start-menu h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+        .start-menu .menu-item {
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .start-menu .menu-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        /* Chatbot Button */
+        .chatbot-btn {
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: #0078D7;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Chatbot Window */
+        .chatbot-window {
+            position: fixed;
+            bottom: 130px;
+            right: 20px;
+            width: 300px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .chatbot-window.show {
+            display: flex;
+        }
+
+        .chatbot-header {
+            background: #0078D7;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .chatbot-header i {
+            cursor: pointer;
+        }
+
+        .chatbot-messages {
+            padding: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chatbot-msg {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px;
+            border-radius: 10px;
+            margin: 5px 0;
+            max-width: 80%;
+        }
+
+        .chatbot-msg.user {
+            align-self: flex-end;
+            background: #0078D7;
+        }
+
+        .chatbot-msg.bot {
+            align-self: flex-start;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .chatbot-input button {
+            background: #0078D7;
+            color: white;
+            border: none;
+            padding: 8px;
+            margin-left: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #browserWindow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%;
+            max-width: 900px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(15px);
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+        }
+
+        #browserWindow.show {
+            display: flex;
+        }
+
+        .browser-address-bar {
+            padding: 10px 16px;
+            background-color: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            font-size: 14px;
+            font-family: monospace;
+            word-break: break-all;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .browser-iframe {
+            flex: 1;
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Address bar and header styles */
+        .window-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px;
+        background-color: rgba(0,0,0,0.1);
+        color: white;
+        font-weight: bold;
+        }
+
+        .power-section {
+        position: relative;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+        }
+
+        .power-section i {
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        transition: color 0.2s;
+        }
+
+        .power-section i:hover {
+        color: red;
+        }
+
+        .power-dropdown {
+        position: absolute;
+        bottom: 35px;
+        background: rgba(30, 30, 30, 0.95);
+        padding: 5px 0;
+        border-radius: 6px;
+        width: 130px;
+        display: none;
+        z-index: 999;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .power-option {
+        color: white;
+        padding: 8px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        }
+
+        .power-option:hover {
+        background: rgba(255, 255, 255, 0.1);
+        }
+
+        .power-dropdown {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        transform: scale(0.95);
+        opacity: 0;
+        pointer-events: none;
+        }
+
+        .power-dropdown.show {
+        transform: scale(1);
+        opacity: 1;
+        pointer-events: auto;
+        }
+
+        #shutdown-screen {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: black;
+        color: white;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2em;
+        font-family: 'Segoe UI', sans-serif;
+        }
+
+        .shutdown-message {
+        animation: fadeOut 2s ease-in-out forwards;
+        }
+
+        @keyframes fadeOut {
+        0%   { opacity: 1; }
+        100% { opacity: 0; }
+        }
+
+        .welcome-popup {
+        position: fixed;
+        bottom: 140px;
+        right: 80px;
+        background: #0078D7;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        animation: slideIn 0.5s ease-out;
+        z-index: 9999;
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .chatbot-msg small {
+        display: block;
+        font-size: 0.75em;
+        opacity: 0.6;
+        margin-top: 4px;
+    }
+
+    .chatbot-welcome-msg {
+    position: fixed;
+    bottom: 130px;
+    right: 85px;
+        background: #0078D7;
+        color: white;
+        padding: 12px 18px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        font-size: 0.9em;
+        max-width: 220px;
+        z-index: 9999;
+        animation: fadeInUp 0.4s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    </style>
+</head>
+<body>
+    <!-- Windows Start Menu -->
+    <div class="start-menu" id="startMenu">
+        <h3>Start Menu</h3>
+        <div class="menu-item" onclick="toggleWindow('aboutMeWindow')">
+            <i class="fa-solid fa-user"></i> About Me
+        </div>
+        <div class="menu-item" onclick="toggleWindow('contactMeWindow')">
+            <i class="fa-solid fa-envelope"></i> Contact Me
+        </div>
+        <div class="menu-item" onclick="toggleWindow('myProjectsWindow')">
+            <i class="fa-solid fa-folder-open"></i> My Projects
+        </div>
+        <div class="menu-item" onclick="toggleWindow('browserWindow')">
+            <i class="fa-brands fa-chrome" title="Browser"></i>Browser
+        </div>
+        <div class="power-section">
+            <i class="fa-solid fa-power-off" id="powerIcon"></i>
+            <div class="power-dropdown" id="powerDropdown">
+                <div class="power-option" data-action="shutdown">🔌 Shutdown</div>
+                <div class="power-option" data-action="sleep">🛌 Sleep</div>
+                <div class="power-option" data-action="restart">🔄 Restart</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Window -->
+    <div class="window" id="aboutMeWindow">
+        <div class="title-bar">
+            <span>About Me</span>
+            <div class="window-controls">
+                <i class="fa-solid fa-xmark" onclick="toggleWindow('aboutMeWindow')"></i>
+            </div>
+        </div>
+        <div class="content">
+            <div class="text">
+                <h1>About Me</h1>
+                <p>Hello! I'm krithik currently a B.Tech student (Computer Science) </p>
+                <p>so i have interest in many sectors like CS, AI, Game develpoment and more...</p>
+            </div>
+            <div class="image">
+                <img src="profile.jpg" alt="Profile Image">
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Button -->
+    <div class="chatbot-btn" onclick="toggleChatbot()">
+        <i class="fa-solid fa-robot"></i>
+    </div>
+
+
+<!-- Chatbot Window -->
+<div class="chatbot-window" id="chatbotWindow">
+    <div class="chatbot-header">
+        <span>Chat Assistant</span>
+        <i class="fa-solid fa-xmark" onclick="toggleChatbot()"></i>
+    </div>
+    <div class="chatbot-messages" id="chatbotMessages">
+        <div class="chatbot-msg bot">Hello! How can I assist you today?</div>
+    </div>
+    <div class="chatbot-input">
+        <input type="text" id="chatbotInput" placeholder="Type a message..." onkeypress="handleChat(event)">
+        <button onclick="sendChat()"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+</div>
+
+
+    <!-- Contact Me Window -->
+    <div class="window" id="contactMeWindow">
+        <div class="title-bar">
+            <span>Contact Me</span>
+            <div class="window-controls">
+                <i class="fa-solid fa-xmark" onclick="toggleWindow('contactMeWindow')"></i>
+            </div>
+        </div>
+        <div class="content">
+            <div class="text">
+                <h1>Contact Me</h1>
+                <p>Email: 2002.krithik@gmail.com</p>
+                <p>LinkedIn: linkedin.com/in/myprofile</p>
+                <p>GitHub: github.com/myusername</p>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Browser Window -->
+<div id="browserWindow" class="window">
+    <div class="title-bar">
+        <span>Browser</span>
+        <div class="window-controls">
+            <i class="fa-solid fa-xmark" onclick="toggleWindow('browserWindow')"></i>
+        </div>
+    </div>
+    <div class="browser-address-bar">
+        https://krithik-s-jpg.github.io/Fake-Google/
+    </div>
+    <iframe class="browser-iframe" src="https://krithik-s-jpg.github.io/Fake-Google/"></iframe>
+</div>
+  
+
+    <!-- My Projects Window -->
+<div class="window" id="myProjectsWindow">
+    <div class="title-bar">
+        <span>My Projects</span>
+        <div class="window-controls">
+            <i class="fa-solid fa-xmark" onclick="toggleWindow('myProjectsWindow')"></i>
+        </div>
+    </div>
+    <div class="content">
+        <div class="text">
+            <h1>My Projects</h1>
+            <div class="projects-container">
+                <div class="project-card">
+                    <h2>3D Portfolio Website</h2>
+                    <p>A fully interactive 3D portfolio using Three.js.</p>
+                    <button onclick="window.open('https://github.com/yourusername/3d-portfolio', '_blank')">View</button>
+                </div>
+                <div class="project-card">
+                    <h2>Interactive UI Designs</h2>
+                    <p>Creative UI/UX designs with smooth animations.</p>
+                    <button onclick="window.open('https://github.com/yourusername/ui-designs', '_blank')">View</button>
+                </div>
+                <div class="project-card">
+                    <h2>Flutter Productivity App</h2>
+                    <p>A Flutter app for tracking daily habits & goals.</p>
+                    <button onclick="window.open('https://github.com/yourusername/flutter-app', '_blank')">View</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add this CSS to style flashcards -->
+<style>
+    body > iframe[style] { display: none !important; }
+    .projects-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 15px;
+    }
+    .project-card {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .project-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    .project-card h2 {
+        font-size: 1.2em;
+        color: #00aaff;
+    }
+    .project-card p {
+        font-size: 1em;
+        color: white;
+        margin-bottom: 10px;
+    }
+    .project-card button {
+        background: #00aaff;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .project-card button:hover {
+        background: #0088cc;
+    }
+</style>
+
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <div class="taskbar-container">
+            <div class="start-btn" onclick="toggleStartMenu()">
+                <i class="fa-brands fa-windows"></i>
+            </div>
+            <div class="taskbar-icons">
+                <i class="fa-solid fa-user" onclick="toggleWindow('aboutMeWindow')"></i>
+                <i class="fa-solid fa-envelope" onclick="toggleWindow('contactMeWindow')"></i>
+                <i class="fa-solid fa-folder-open" onclick="toggleWindow('myProjectsWindow')"></i>
+                <i class="fa-brands fa-chrome" onclick="toggleWindow('browserWindow')"></i>
+            </div>
+            <div class="time" id="timeDisplay"></div>
+        </div>
+    </div>    
+
+    
+    <script>
+        // Create and show loading screen
+        const loadingScreen = document.createElement("div");
+        loadingScreen.id = "windows-loading";
+        loadingScreen.innerHTML = `
+            <div class="windows-loader">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            </div>
+        `;
+        document.body.appendChild(loadingScreen);
+
+        // Style for loader
+        const style = document.createElement("style");
+        style.textContent = `
+            #windows-loading {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            }
+            .windows-loader {
+            display: flex;
+            gap: 12px;
+            }
+            .windows-loader .dot {
+            width: 14px;
+            height: 14px;
+            background-color: #00aaff;
+            border-radius: 50%;
+            animation: bounce 1s infinite ease-in-out;
+            }
+            .windows-loader .dot:nth-child(2) { animation-delay: 0.1s; }
+            .windows-loader .dot:nth-child(3) { animation-delay: 0.2s; }
+            .windows-loader .dot:nth-child(4) { animation-delay: 0.3s; }
+            .windows-loader .dot:nth-child(5) { animation-delay: 0.4s; }
+
+            @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Wait 2 seconds, then show PC window and remove loader
+        window.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+            document.getElementById("windows-loading")?.remove();
+            document.getElementById("virtual-desktop").style.display = "block"; // ✅ Show only the desktop, not any window
+        }, 2000);
+        });
+
+        // Power options
+        const powerIcon = document.getElementById("powerIcon");
+        const powerDropdown = document.getElementById("powerDropdown");
+
+        powerIcon.addEventListener("click", () => {
+        powerDropdown.style.display = powerDropdown.style.display === "block" ? "none" : "block";
+        });
+
+        document.querySelectorAll(".power-option").forEach(option => {
+            option.addEventListener("click", () => {
+                const action = option.dataset.action;
+                powerDropdown.style.display = "none";
+                const shutdownScreen = document.getElementById("shutdown-screen");
+                const desktopOverlay = document.getElementById("desktop-overlay");
+
+                
+                if (action === "shutdown") {
+                shutdownScreen.style.display = "flex";
+                setTimeout(() => {
+                    desktopOverlay.style.display = "none";
+                    shutdownScreen.style.display = "none";
+                }, 2000); // after animation
+                }
+
+                else if (action === "sleep") {
+                shutdownScreen.querySelector(".shutdown-message").innerText = "Sleeping...";
+                shutdownScreen.style.display = "flex";
+                setTimeout(() => {
+                    shutdownScreen.style.display = "none";
+                }, 2000);
+                }
+
+                else if (action === "restart") {
+                shutdownScreen.querySelector(".shutdown-message").innerText = "Restarting...";
+                shutdownScreen.style.display = "flex";
+                setTimeout(() => {
+                    shutdownScreen.style.display = "none";
+                    location.reload(); // restart desktop
+                }, 2000);
+                }
+            });
+            powerIcon.addEventListener("click", () => {
+                powerDropdown.classList.toggle("show");
+            });
+        });
+
+        function toggleWindow(windowId) {
+            const win = document.getElementById(windowId);
+            win.classList.toggle('show');
+        }
+    
+        function closeWindow(windowId) {
+            document.getElementById(windowId).classList.remove('show');
+        }
+    
+        function toggleStartMenu() {
+            document.getElementById('startMenu').classList.toggle('show');
+        }
+    
+        // Chatbot toggle
+        function toggleChatbot() {
+            document.getElementById('chatbotWindow').classList.toggle('show');
+        }
+    
+        // Send message to chatbot
+        function sendChat() {
+            const input = document.getElementById("chatbotInput");
+            const message = input.value.trim();
+            if (message === "") return;
+    
+            const chatContainer = document.getElementById("chatbotMessages");
+    
+            const userMsg = document.createElement("div");
+            userMsg.className = "chatbot-msg user";
+            userMsg.innerText = message;
+            chatContainer.appendChild(userMsg);
+    
+            input.value = "";
+    
+            showTypingIndicator();
+            setTimeout(() => {
+                hideTypingIndicator();
+                const botMsg = document.createElement("div");
+                botMsg.className = "chatbot-msg bot";
+                botMsg.innerText = getBotResponse(message);
+                chatContainer.appendChild(botMsg);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 1000);
+        }
+
+        function showTypingIndicator() {
+            const chatContainer = document.getElementById("chatbotMessages");
+            const typing = document.createElement("div");
+            typing.className = "chatbot-msg bot typing";
+            typing.innerText = "Typing...";
+            typing.id = "typingIndicator";
+            chatContainer.appendChild(typing);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const typing = document.getElementById("typingIndicator");
+            if (typing) typing.remove();
+        }
+
+        function getBotResponse(msg) {
+            msg = msg.toLowerCase();
+
+            if (msg.includes("hi")) return "Hello! How can I help you today?";
+            if (msg.includes("hello")) return "Hi! How can I help you today?";
+            if (msg.includes("who are you")) return "I'm your portfolio assistant!,My name is F.O.A.M 😁";
+            if (msg.includes("project")) return "You can find my projects in the Start Menu → My Projects.";
+            if (msg.includes("skills")) return "Krithik is skilled in Web Dev, AI/ML, and 3D Development!";
+            if (msg.includes("contact")) return "Click 'Contact Me' in the Start Menu to reach out!";
+            if (msg.includes("open")) return "Use the Start Menu below to open different sections.";
+            return "Sorry, I didn’t understand that. Try something like 'What are your projects?'.";
+        }
+
+
+    
+        // Pressing enter triggers sendChat()
+        function handleChat(e) {
+            if (e.key === "Enter") {
+                sendChat();
+            }
+        }
+    
+        // Display current time
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById("timeDisplay").innerText = `${hours}:${minutes}`;
+        }
+
+        function openBrowser() {
+            toggleWindow('browserWindow');
+        }
+
+        // Make windows draggable
+        document.querySelectorAll('.window').forEach(win => {
+            const header = win.querySelector('.window-header');
+            let isDragging = false;
+            let offsetX, offsetY;
+
+            header.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                offsetX = e.clientX - win.offsetLeft;
+                offsetY = e.clientY - win.offsetTop;
+                win.style.zIndex = Date.now(); // Bring to front
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                win.style.left = `${e.clientX - offsetX}px`;
+                win.style.top = `${e.clientY - offsetY}px`;
+            });
+        });
+
+        setTimeout(() => {
+            const welcome = document.getElementById("chatWelcome");
+            if (welcome) welcome.remove();
+        }, 5000);
+
+        // Update time every 30 seconds
+        updateTime();
+        setInterval(updateTime, 30000);
+    </script>
+
+    <!-- Shutdown Screen Overlay -->
+    <div id="shutdown-screen" style="display:none;">
+    <div class="shutdown-message">Shutting down...</div>
+    </div>
+
+</body>
+</html>
