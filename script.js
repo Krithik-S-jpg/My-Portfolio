@@ -230,7 +230,7 @@ const loader = new GLTFLoader();
 let laptopObject = null;
 let cupboardDoor = null;
 
-loader.load("/models/room.glb", function (gltf) {
+loader.load("./models/room.glb", function (gltf) {
   const model = gltf.scene;
   model.scale.set(1, 1, 1);
 
