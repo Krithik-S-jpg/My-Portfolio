@@ -1,9 +1,5 @@
 
 
-// FontAwesome setup
-library.add(faHome, faUser, faProjectDiagram, faEnvelope);
-dom.watch();
-
 let lampObject = null;
 let lampLight = null;
 let lampOn = false;
