@@ -227,11 +227,10 @@ camera.lookAt(0, 1.5, 0);
 
 // GLTF Loader
 const loader = new GLTFLoader();
-const controls = new OrbitControls(camera, renderer.domElement); // ✅ still works
 let laptopObject = null;
 let cupboardDoor = null;
 
-loader.load("./models/room.glb", function (gltf) {
+loader.load("/models/room.glb", function (gltf) {
   const model = gltf.scene;
   model.scale.set(1, 1, 1);
 
