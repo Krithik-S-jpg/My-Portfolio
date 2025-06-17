@@ -227,6 +227,7 @@ camera.lookAt(0, 1.5, 0);
 
 // GLTF Loader
 const loader = new GLTFLoader();
+const controls = new OrbitControls(camera, renderer.domElement); // ✅ still works
 let laptopObject = null;
 let cupboardDoor = null;
 
