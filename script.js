@@ -6,19 +6,20 @@ let lampOn = false;
 let lampToggleSound;
 let lampClicked = false;
 
-// Add loading screen HTML
-const loadingScreen = document.createElement("div");
-loadingScreen.id = "loading-screen";
-loadingScreen.innerHTML = `
-  <div class="advanced-loader">
-    <div class="neon-circle"></div>
-    <div class="loading-animation">
-      <p class="loading-text">Initializing<span class="dots"></span></p>
-    </div>
-  </div>
-`;
-document.body.appendChild(loadingScreen);
 
+document.addEventListener("DOMContentLoaded", () => {
+  // Your existing code
+  const loadingScreen = document.createElement("div");
+  loadingScreen.id = "loading-screen";
+  loadingScreen.innerHTML = `
+    <div class="advanced-loader">
+      <div class="neon-circle"></div>
+      <div class="loading-animation">
+        <p class="loading-text">Initializing<span class="dots"></span></p>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(loadingScreen);
 
 // Add loading screen CSS
 const style = document.createElement("style");
@@ -204,6 +205,10 @@ projectCardStyle.textContent = `
 }
 `;
 document.head.appendChild(projectCardStyle);
+
+  // other logic (scene init, render, loaders etc.)
+});
+
 
 // Scene setup
 const scene = new THREE.Scene();
