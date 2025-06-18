@@ -225,7 +225,7 @@ camera.position.set(15, 10, 25); // ← zoom out by increasing Z or Y
 camera.lookAt(0, 1.5, 0);
 
 // GLTF Loader
-const loader = new GLTFLoader();
+const loader = new THREE.GLTFLoader(); // ✅ CORRECT when using <script> tag
 let laptopObject = null;
 let cupboardDoor = null;
 
