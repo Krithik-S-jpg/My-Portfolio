@@ -206,8 +206,6 @@ projectCardStyle.textContent = `
 `;
 document.head.appendChild(projectCardStyle);
 
-  // other logic (scene init, render, loaders etc.)
-});
 
 
 // Scene setup
@@ -1669,4 +1667,9 @@ function toggleLamp() {
   // Play lamp sound
   playLampSound();
 }
+
+  // other logic (scene init, render, loaders etc.)
+});
+
+
 
