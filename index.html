@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- FontAwesome Free CDN -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- FontAwesome Free CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
+  <!-- FontAwesome (optional) -->
+  <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
+
+  <!-- THREE.js Core -->
+  <script src="https://unpkg.com/three@0.148.0/build/three.min.js"></script>
+
+  <!-- Loaders and Controls must be after THREE.js -->
+  <script src="https://unpkg.com/three@0.148.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://unpkg.com/three@0.148.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
-    <!-- Load THREE first -->
-    <script src="https://unpkg.com/three@0.148.0/build/three.min.js"></script>
 
-    <!-- Then load GLTFLoader and OrbitControls -->
-    <script src="https://unpkg.com/three@0.148.0/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="https://unpkg.com/three@0.148.0/examples/js/controls/OrbitControls.js"></script>
+  <canvas id="three-canvas"></canvas>
 
-    <!-- GSAP (optional if you use it) -->
-    <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
-
-    <!-- FontAwesome (optional) -->
-    <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
-
-    <canvas id="three-canvas"></canvas>
-    <script src="script.js"></script>
+  <!-- Always load your main JS last -->
+  <script src="script.js"></script>
 </body>
 </html>
