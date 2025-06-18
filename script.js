@@ -228,6 +228,7 @@ camera.lookAt(0, 1.5, 0);
 const loader = new THREE.GLTFLoader(); // ✅ CORRECT when using <script> tag
 let laptopObject = null;
 let cupboardDoor = null;
+console.log(THREE.GLTFLoader);  // Should NOT be undefined
 
 loader.load("/models/room.glb", function (gltf) {
   const model = gltf.scene;
