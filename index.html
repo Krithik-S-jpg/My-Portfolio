@@ -1,28 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- FontAwesome Free CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
 
-    <!-- Load THREE first -->
-    <script src="https://unpkg.com/three@0.148.0/build/three.min.js"></script>
+  <!-- FontAwesome Free CDN -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+  />
 
-    <!-- Then load GLTFLoader and OrbitControls -->
-    <script src="https://unpkg.com/three@0.148.0/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="https://unpkg.com/three@0.148.0/examples/js/controls/OrbitControls.js"></script>
+  <!-- THREE.js Core -->
+  <script src="https://unpkg.com/three@0.148.0/build/three.min.js"></script>
 
-    <!-- GSAP (optional if you use it) -->
-    <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
+  <!-- Load GLTFLoader and OrbitControls after THREE -->
+  <script src="https://unpkg.com/three@0.148.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://unpkg.com/three@0.148.0/examples/js/controls/OrbitControls.js"></script>
 
-    <!-- FontAwesome (optional) -->
-    <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
+  <!-- GSAP (optional if used) -->
+  <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
+
+  <!-- If you're using FontAwesome icons (optional JS-based) -->
+  <!-- ⚠️ Replace `your-kit-id` with real kit if you're using this -->
+  <!-- <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script> -->
 </head>
 <body>
-    <canvas id="three-canvas"></canvas>
-    <script src="script.js"></script>
+  <!-- Your canvas -->
+  <canvas id="three-canvas"></canvas>
+
+  <!-- Your custom script -->
+  <script src="script.js"></script>
 </body>
 </html>
