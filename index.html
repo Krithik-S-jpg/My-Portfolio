@@ -2,34 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>3D Portfolio</title>
-  <link rel="stylesheet" href="style.css" />
 
-  <!-- FontAwesome Free CDN -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-  />
-
-  <!-- Load THREE core -->
+  <!-- Three.js core -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
 
-  <!-- Load GLTFLoader (attaches to global THREE namespace) -->
+  <!-- Load GLTFLoader (global GLTFLoader, not THREE.GLTFLoader) -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.148.0/examples/js/loaders/GLTFLoader.js"></script>
 
   <!-- Load OrbitControls -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.148.0/examples/js/controls/OrbitControls.js"></script>
 
-  <!-- If you're using FontAwesome icons (optional JS-based) -->
-  <!-- ⚠️ Replace `your-kit-id` with real kit if you're using this -->
-  <!-- <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script> -->
+  <!-- Optional: GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+
+  <!-- Optional: Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Your canvas -->
   <canvas id="three-canvas"></canvas>
 
-  <!-- Your custom script -->
+  <!-- Your main script -->
   <script src="script.js"></script>
 </body>
 </html>

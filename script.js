@@ -225,10 +225,11 @@ camera.position.set(15, 10, 25); // ← zoom out by increasing Z or Y
 camera.lookAt(0, 1.5, 0);
 
 // GLTF Loader
-const loader = new THREE.GLTFLoader(); // ✅ CORRECT when using <script> tag
+const loader = new GLTFLoader(); // ✅ This works
+console.log(typeof GLTFLoader); // should log: 'function'
 let laptopObject = null;
 let cupboardDoor = null;
-console.log(THREE.GLTFLoader);  // Should NOT be undefined
+
 
 loader.load("/models/room.glb", function (gltf) {
   const model = gltf.scene;
