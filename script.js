@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let lampOn = false;
   let lampToggleSound;
   let lampClicked = false;
+
   // Your existing code
   const loadingScreen = document.createElement("div");
   loadingScreen.id = "loading-screen";
@@ -224,7 +225,7 @@ camera.lookAt(0, 1.5, 0);
 
 // GLTF Loader
 console.log('THREE.GLTFLoader =', THREE.GLTFLoader);
-const loader = new THREE.GLTFLoader(); // ✅ Correct for CDN use
+const loader = new THREE.GLTFLoader();
 let laptopObject = null;
 let cupboardDoor = null;
 
