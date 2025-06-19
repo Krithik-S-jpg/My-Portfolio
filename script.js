@@ -1,4 +1,4 @@
-
+import * as THREE from "three";
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -225,6 +225,7 @@ camera.position.set(15, 10, 25); // ← zoom out by increasing Z or Y
 camera.lookAt(0, 1.5, 0);
 
 // GLTF Loader
+console.log('THREE.GLTFLoader =', THREE.GLTFLoader);
 const loader = new THREE.GLTFLoader(); // ✅ Correct for CDN use
 let laptopObject = null;
 let cupboardDoor = null;
