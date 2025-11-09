@@ -2,29 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="google-site-verification" content="I8ZYgJ0m5FFy6VrttdqJJ-6KNNnThg423HyMJ-xTCdg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>3D Portfolio</title>
 
-  <!-- Three.js core -->
+  <!-- ✅ THREE.js core -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.148.0/examples/js/loaders/GLTFLoader.js"></script>
 
+  <!-- ✅ Load GLTFLoader & OrbitControls locally to avoid ORB/CORS issues -->
+  <script src="js/libs/GLTFLoader.js"></script>
+  <script src="js/libs/OrbitControls.js"></script>
 
-  <!-- Load OrbitControls -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.148.0/examples/js/controls/OrbitControls.js"></script>
-
-  <!-- Optional: GSAP -->
+  <!-- ✅ GSAP (for animations) -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
 
-  <!-- Optional: Font Awesome -->
+  <!-- ✅ FontAwesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
 
+  <!-- ✅ Your custom CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- 3D Canvas -->
   <canvas id="three-canvas"></canvas>
 
-  <!-- Your main script -->
+  <!-- ✅ Your Main Script -->
   <script src="script.js"></script>
 </body>
 </html>

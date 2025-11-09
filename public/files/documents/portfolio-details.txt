@@ -1,0 +1,49 @@
+PORTFOLIO DETAILS
+================
+
+Name: Krithik
+Role: Full Stack Developer
+Location: Trichy, Tamil Nadu
+
+SKILLS
+------
+• Frontend: HTML, CSS, JavaScript, React
+• Backend: Node.js, Python, Java
+• Database: SQL, MongoDB, Firebase
+• 3D Graphics: Three.js
+• Other: Git, VS Code, Figma
+
+PROJECTS
+--------
+1. 3D Portfolio (Current)
+   - Interactive 3D room with Three.js
+   - File Explorer with Windows-like UI
+   - Dynamic project showcase
+   - Smart chatbot integration
+
+2. Google Clone
+   - Responsive design
+   - Search functionality
+   - Modern UI/UX
+
+3. One Piece Fan Site
+   - Anime-themed website
+   - Character showcase
+   - Interactive elements
+
+EDUCATION
+---------
+• B.Tech Computer Science and Business Systems
+  Saranathan College of Engineering, Trichy
+  (Currently pursuing)
+
+• 12th Standard - SBIOA CBSE School (2023)
+• 10th Standard - SBIOA CBSE School (2021)
+
+CONTACT
+-------
+Email: krithik@example.com
+LinkedIn: linkedin.com/in/krithik
+GitHub: github.com/krithik
+
+This portfolio showcases my skills in web development, 3D graphics, and interactive design. The 3D room environment demonstrates my ability to create immersive user experiences using modern web technologies. 

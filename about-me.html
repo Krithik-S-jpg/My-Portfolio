@@ -131,6 +131,8 @@
             font-size: 1em;
             justify-content: flex-end;
         }
+        
+
         .start-menu {
             position: fixed;
             bottom: 60px;
@@ -332,63 +334,129 @@
         }
 
         .power-dropdown {
-        position: absolute;
-        bottom: 35px;
-        background: rgba(30, 30, 30, 0.95);
-        padding: 5px 0;
-        border-radius: 6px;
-        width: 130px;
-        display: none;
-        z-index: 999;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            position: absolute;
+            bottom: 35px;
+            background: rgba(30, 30, 30, 0.95);
+            padding: 5px 0;
+            border-radius: 6px;
+            width: 130px;
+            display: none;
+            z-index: 999;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: scale(0.95);
+            opacity: 0;
+            pointer-events: none;
         }
 
         .power-option {
-        color: white;
-        padding: 8px 16px;
-        font-size: 14px;
-        cursor: pointer;
+            color: white;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
         }
 
         .power-option:hover {
-        background: rgba(255, 255, 255, 0.1);
-        }
-
-        .power-dropdown {
-        transition: opacity 0.3s ease, transform 0.3s ease;
-        transform: scale(0.95);
-        opacity: 0;
-        pointer-events: none;
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .power-dropdown.show {
-        transform: scale(1);
-        opacity: 1;
-        pointer-events: auto;
+            display: block;
+            transform: scale(1);
+            opacity: 1;
+            pointer-events: auto;
         }
 
         #shutdown-screen {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: black;
-        color: white;
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2em;
-        font-family: 'Segoe UI', sans-serif;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+            animation: fadeIn 0.5s ease-out;
         }
-
         .shutdown-message {
-        animation: fadeOut 2s ease-in-out forwards;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
         }
-
-        @keyframes fadeOut {
-        0%   { opacity: 1; }
-        100% { opacity: 0; }
+        .shutdown-icon {
+            font-size: 4em;
+            animation: pulse 2s infinite;
+        }
+        .shutdown-text {
+            font-size: 1.5em;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        .shutdown-progress {
+            width: 300px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00aaff, #0088cc);
+            width: 0%;
+            transition: width 2.5s ease-out;
+            border-radius: 4px;
+        }
+        .sleep-animation {
+            margin-top: 20px;
+        }
+        .sleep-dots {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+        .sleep-dots span {
+            width: 12px;
+            height: 12px;
+            background: #00aaff;
+            border-radius: 50%;
+            animation: sleepDots 1.5s infinite ease-in-out;
+        }
+        .sleep-dots span:nth-child(1) { animation-delay: 0s; }
+        .sleep-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .sleep-dots span:nth-child(3) { animation-delay: 0.4s; }
+        .restart-animation {
+            margin-top: 20px;
+        }
+        .restart-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #00aaff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        @keyframes sleepDots {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1.2); opacity: 1; }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .welcome-popup {
@@ -441,6 +509,505 @@
             transform: translateY(0);
         }
     }
+    .desktop-icons {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      z-index: 1;
+    }
+    .desktop-icon {
+      width: 80px;
+      height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      border-radius: 12px;
+      transition: background 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .desktop-icon:focus, .desktop-icon:hover {
+      background: rgba(255,255,255,0.12);
+      box-shadow: 0 0 8px #00aaff88;
+    }
+    .desktop-icon i {
+      font-size: 2.2em;
+      color: #00aaff;
+      margin-bottom: 6px;
+    }
+    .desktop-icon span {
+      color: #fff;
+      font-size: 1em;
+      text-align: center;
+      text-shadow: 0 1px 4px #000;
+    }
+    .window {
+      opacity: 0;
+      transform: scale(0.96);
+      transition:
+        opacity 0.25s cubic-bezier(.4,2,.6,1),
+        transform 0.25s cubic-bezier(.4,2,.6,1),
+        left 0.3s cubic-bezier(.4,2,.6,1),
+        top 0.3s cubic-bezier(.4,2,.6,1),
+        width 0.3s cubic-bezier(.4,2,.6,1),
+        height 0.3s cubic-bezier(.4,2,.6,1);
+      pointer-events: none;
+    }
+    .window.show {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+    .window.minimized {
+      opacity: 0;
+      transform: scale(0.95);
+      pointer-events: none;
+    }
+    .window.maximized {
+      left: 0 !important;
+      top: 0 !important;
+      width: 100vw !important;
+      height: calc(100vh - 50px) !important;
+      z-index: 9998 !important;
+      transition:
+        left 0.3s cubic-bezier(.4,2,.6,1),
+        top 0.3s cubic-bezier(.4,2,.6,1),
+        width 0.3s cubic-bezier(.4,2,.6,1),
+        height 0.3s cubic-bezier(.4,2,.6,1),
+        opacity 0.25s cubic-bezier(.4,2,.6,1),
+        transform 0.25s cubic-bezier(.4,2,.6,1);
+    }
+    .window.maximized .content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .window.maximized .text {
+      width: 100%;
+      height: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .window.maximized .projects-container {
+      width: 100%;
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      align-items: stretch;
+    }
+    .taskbar-window-btn {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      margin: 0 4px;
+      padding: 4px 12px;
+      font-size: 1em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .taskbar-window-btn:hover {
+      background: rgba(0,0,0,0.25);
+    }
+    .start-menu, #startMenu {
+      z-index: 10010 !important;
+    }
+
+    /* File Explorer Styles */
+    .file-explorer-content {
+      display: flex;
+      height: 100%;
+      background: #f0f0f0;
+    }
+
+    .file-explorer-sidebar {
+      width: 250px;
+      background: #f8f9fa;
+      border-right: 1px solid #dee2e6;
+      overflow-y: auto;
+      padding: 10px 0;
+    }
+
+    .sidebar-section {
+      margin-bottom: 20px;
+    }
+
+    .sidebar-section h3 {
+      font-size: 12px;
+      font-weight: 600;
+      color: #6c757d;
+      text-transform: uppercase;
+      margin: 0 0 8px 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-size: 14px;
+      color: #495057;
+    }
+
+    .sidebar-item:hover {
+      background-color: #e9ecef;
+    }
+
+    .sidebar-item.active {
+      background-color: #0078d4;
+      color: white;
+    }
+
+    .sidebar-item i {
+      margin-right: 12px;
+      width: 16px;
+      text-align: center;
+    }
+
+    .file-explorer-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: white;
+    }
+
+    .file-explorer-toolbar {
+      display: flex;
+      align-items: center;
+      padding: 8px 16px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+      gap: 8px;
+    }
+
+    .toolbar-group {
+      display: flex;
+      gap: 4px;
+    }
+
+    .toolbar-btn {
+      background: none;
+      border: 1px solid transparent;
+      padding: 6px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #495057;
+      transition: all 0.2s;
+    }
+
+    .toolbar-btn:hover:not(:disabled) {
+      background-color: #e9ecef;
+      border-color: #ced4da;
+    }
+
+    .toolbar-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .address-bar {
+      flex: 1;
+      background: white;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      padding: 6px 12px;
+      margin: 0 8px;
+      font-size: 14px;
+      color: #495057;
+    }
+
+    .file-explorer-view {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 16px;
+      align-content: start;
+    }
+
+    .file-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      min-height: 80px;
+      justify-content: center;
+    }
+
+    .file-item:hover {
+      background-color: #f8f9fa;
+      transform: translateY(-2px);
+    }
+
+    .file-item.selected {
+      background-color: #e3f2fd;
+      border: 2px solid #2196f3;
+    }
+
+    .file-item i {
+      font-size: 32px;
+      margin-bottom: 8px;
+      color: #6c757d;
+    }
+
+    .file-item.folder i {
+      color: #ffc107;
+    }
+
+    .file-item.document i {
+      color: #2196f3;
+    }
+
+    .file-item.image i {
+      color: #4caf50;
+    }
+
+    .file-item.pdf i {
+      color: #f44336;
+    }
+
+    .file-item.certificate i {
+      color: #9c27b0;
+    }
+
+    .file-item.resume i {
+      color: #ff9800;
+    }
+
+    .file-item span {
+      font-size: 12px;
+      color: #495057;
+      word-break: break-word;
+      line-height: 1.2;
+    }
+
+    .file-item.selected span {
+      color: #1976d2;
+      font-weight: 500;
+    }
+
+    /* File Preview Modal */
+    .file-preview-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20000;
+    }
+
+    .file-preview-content {
+      background: white;
+      border-radius: 8px;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow: auto;
+      position: relative;
+    }
+
+    .file-preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .file-preview-header h3 {
+      margin: 0;
+      color: #495057;
+    }
+
+    .file-preview-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #6c757d;
+      padding: 4px;
+    }
+
+    .file-preview-close:hover {
+      color: #495057;
+    }
+
+    .file-preview-body {
+      padding: 20px;
+    }
+
+    .file-preview-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
+    .file-preview-text {
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #495057;
+      white-space: pre-wrap;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .file-explorer-sidebar {
+        width: 200px;
+      }
+
+      .file-explorer-view {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 12px;
+        padding: 12px;
+      }
+
+      .file-item {
+        min-height: 70px;
+        padding: 8px 6px;
+      }
+
+      .file-item i {
+        font-size: 28px;
+      }
+
+      .file-item span {
+        font-size: 11px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .file-explorer-sidebar {
+        width: 150px;
+      }
+
+      .file-explorer-view {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 8px;
+        padding: 8px;
+      }
+
+      .file-item {
+        min-height: 60px;
+        padding: 6px 4px;
+      }
+
+      .file-item i {
+        font-size: 24px;
+      }
+
+      .file-item span {
+        font-size: 10px;
+      }
+    }
+
+    .file-preview-pdf {
+      width: min(90vw, 1000px);
+      height: 80vh;
+      border: none;
+      border-radius: 4px;
+    }
+    /* Window enhancements: sizing, resizer, active header */
+    .window {
+      min-width: 280px;
+      min-height: 160px;
+    }
+    .window .window-resizer {
+      position: absolute;
+      right: 0; bottom: 0;
+      width: 16px; height: 16px;
+      cursor: se-resize;
+      background: linear-gradient(135deg, transparent 50%, #ffffff77 50%);
+      opacity: 0.7;
+      border-bottom-right-radius: 8px;
+    }
+    .window .window-resizer:hover { opacity: 1; }
+    .window .title-bar { transition: background 0.2s ease; }
+    .window.active .title-bar {
+      background: linear-gradient(90deg, #0078D7 60%, #00aaff 100%);
+    }
+    .window:not(.active) .title-bar {
+      background: rgba(0, 0, 0, 0.35);
+    }
+        /* Ensure windows never overflow viewport */
+        .window {
+          max-width: calc(100vw - 16px);
+          max-height: calc(100vh - 60px);
+          overflow: hidden;
+        }
+    /* Instructions window: make inner content scroll if long */
+    #instructionsWindow .instructions-content {
+      max-height: calc(100vh - 200px);
+      overflow: auto;
+    }
+    #instructionsWindow .instructions-body ul {
+      margin-left: 16px;
+    }
+    #instructionsWindow .instructions-body li {
+      margin: 6px 0;
+    }
+    
+    /* ===== Responsive (Laptop/Tablet/Phone) ===== */
+    @media (max-width: 1024px) {
+      .window { width: 80vw; }
+      #browserWindow { width: 84vw; height: 70vh; }
+    }
+    @media (max-width: 768px) {
+      /* Windows fit small screens */
+      .window { width: 94vw !important; left: 3vw !important; transform: none; top: 10px !important; }
+      .desktop-icons { top: 18px; left: 18px; gap: 18px; }
+      .desktop-icon { width: 64px; height: 64px; }
+      .desktop-icon i { font-size: 1.8em; }
+      .desktop-icon span { font-size: 0.85em; }
+
+      /* Chatbot */
+      .chatbot-window { right: 12px; bottom: 64px; width: min(360px, 92vw); }
+      #chatbotMessages { max-height: 40vh; }
+
+      /* File Explorer: mobile sidebar toggle */
+      #fileExplorerWindow .file-explorer-content { position: relative; }
+      #fileExplorerWindow .file-explorer-sidebar {
+        position: absolute;
+        top: 48px; /* toolbar approx */
+        left: 0;
+        height: calc(100% - 48px);
+        width: min(70vw, 280px);
+        max-width: 85vw;
+        background: #f8f9fa;
+        box-shadow: 2px 0 12px rgba(0,0,0,0.15);
+        transform: translateX(-100%);
+        transition: transform .25s ease;
+        z-index: 2;
+      }
+      #fileExplorerWindow.sidebar-open .file-explorer-sidebar { transform: translateX(0); }
+      #fileExplorerWindow .file-explorer-toolbar .mobile-only { display: inline-flex; }
+    }
+    @media (max-width: 480px) {
+      .taskbar { height: 50px; }
+      .start-btn { width: 36px; height: 36px; }
+      .time { font-size: 0.9em; }
+    }
     </style>
 </head>
 <body>
@@ -453,11 +1020,14 @@
         <div class="menu-item" onclick="toggleWindow('contactMeWindow')">
             <i class="fa-solid fa-envelope"></i> Contact Me
         </div>
-        <div class="menu-item" onclick="toggleWindow('myProjectsWindow')">
-            <i class="fa-solid fa-folder-open"></i> My Projects
+        <div class="menu-item" onclick="toggleWindow('fileExplorerWindow')">
+            <i class="fa-solid fa-folder"></i> File Explorer
         </div>
         <div class="menu-item" onclick="toggleWindow('browserWindow')">
             <i class="fa-brands fa-chrome" title="Browser"></i>Browser
+        </div>
+        <div class="menu-item" onclick="toggleWindow('instructionsWindow')">
+            <i class="fa-solid fa-circle-info"></i> Instructions
         </div>
         <div class="power-section">
             <i class="fa-solid fa-power-off" id="powerIcon"></i>
@@ -469,12 +1039,38 @@
         </div>
     </div>
 
+    <!-- Desktop Icons Area -->
+    <div class="desktop-icons">
+        <div class="desktop-icon" tabindex="0" onclick="toggleWindow('aboutMeWindow')">
+            <i class="fa-solid fa-user"></i>
+            <span>About Me</span>
+        </div>
+        <div class="desktop-icon" tabindex="0" onclick="toggleWindow('fileExplorerWindow')">
+            <i class="fa-solid fa-folder"></i>
+            <span>File Explorer</span>
+        </div>
+        <div class="desktop-icon" tabindex="0" onclick="toggleWindow('contactMeWindow')">
+            <i class="fa-solid fa-envelope"></i>
+            <span>Contact</span>
+        </div>
+        <div class="desktop-icon" tabindex="0" onclick="toggleWindow('browserWindow')">
+            <i class="fa-brands fa-chrome"></i>
+            <span>Browser</span>
+        </div>
+        <div class="desktop-icon" tabindex="0" onclick="toggleWindow('instructionsWindow')">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>Instructions</span>
+        </div>
+    </div>
+
     <!-- Window -->
     <div class="window" id="aboutMeWindow">
         <div class="title-bar">
             <span>About Me</span>
             <div class="window-controls">
-                <i class="fa-solid fa-xmark" onclick="toggleWindow('aboutMeWindow')"></i>
+                <i class="fa-solid fa-window-minimize" onclick="minimizeWindow('aboutMeWindow')" title="Minimize"></i>
+                <i class="fa-solid fa-window-maximize" onclick="maximizeWindow('aboutMeWindow', this)" title="Maximize"></i>
+                <i class="fa-solid fa-xmark" onclick="toggleWindow('aboutMeWindow')" title="Close"></i>
             </div>
         </div>
         <div class="content">
@@ -485,6 +1081,42 @@
             </div>
             <div class="image">
                 <img src="profile.jpg" alt="Profile Image">
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions Window -->
+    <div class="window" id="instructionsWindow">
+        <div class="title-bar">
+            <span>Instructions</span>
+            <div class="window-controls">
+                <i class="fa-solid fa-window-minimize" onclick="minimizeWindow('instructionsWindow')" title="Minimize"></i>
+                <i class="fa-solid fa-window-maximize" onclick="maximizeWindow('instructionsWindow', this)" title="Maximize"></i>
+                <i class="fa-solid fa-xmark" onclick="toggleWindow('instructionsWindow')" title="Close"></i>
+            </div>
+        </div>
+        <div class="content instructions-content">
+            <div class="instructions-body">
+                <h1>How to use everything</h1>
+                <h3>3D Room (outside this desktop)</h3>
+                <ul>
+                    <li><i class="fa-solid fa-display"></i> PC Screen: Opens this Windows-like desktop. Close button returns the camera to the room view.</li>
+                    <li><i class="fa-solid fa-cabinet-filing"></i> Cupboard: Opens Projects as a cupboard overlay. Each card shows details; close returns camera.</li>
+                    <li><i class="fa-solid fa-chalkboard"></i> Notice Board: Opens a Skills board with sticky notes. Click a note for details.</li>
+                    <li><i class="fa-solid fa-book"></i> Bookshelf: Opens Qualifications as books. Click a book to view its info.</li>
+                    <li><i class="fa-solid fa-volume-high"></i> Speaker: Opens Sound Control to adjust/mute background music.</li>
+                    <li><i class="fa-solid fa-lightbulb"></i> Desk Lamp: Toggles lamp glow and ambience.</li>
+                </ul>
+                <h3>Desktop (inside the PC)</h3>
+                <ul>
+            <li><i class="fa-solid fa-house-laptop"></i> Use Start Menu or desktop icons to open apps (About, Contact, File Explorer, Browser, Instructions).</li>
+                    <li><i class="fa-solid fa-window-minimize"></i> Minimize sends a window to the taskbar; click its button to restore.</li>
+                    <li><i class="fa-solid fa-window-maximize"></i> Maximize fills the screen above the taskbar; click again to restore.</li>
+                    <li><i class="fa-solid fa-arrows-up-down-left-right"></i> Drag windows by the title bar. Title bars won’t go under the taskbar.</li>
+                    <li><i class="fa-solid fa-robot"></i> Chatbot answers about projects, skills, contact, and qualifications; includes typing animation and quick replies.</li>
+                    <li><i class="fa-solid fa-folder-open"></i> File Explorer: navigate via sidebar, address bar, and toolbar (Back/Forward/Up, Refresh); use Search; click files for previews (images, video, audio, PDFs, text).</li>
+                    <li><i class="fa-solid fa-keyboard"></i> File Explorer shortcuts: Backspace = Up, Alt+Left/Right = History, F5 = Refresh.</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -516,7 +1148,9 @@
         <div class="title-bar">
             <span>Contact Me</span>
             <div class="window-controls">
-                <i class="fa-solid fa-xmark" onclick="toggleWindow('contactMeWindow')"></i>
+                <i class="fa-solid fa-window-minimize" onclick="minimizeWindow('contactMeWindow')" title="Minimize"></i>
+                <i class="fa-solid fa-window-maximize" onclick="maximizeWindow('contactMeWindow', this)" title="Maximize"></i>
+                <i class="fa-solid fa-xmark" onclick="toggleWindow('contactMeWindow')" title="Close"></i>
             </div>
         </div>
         <div class="content">
@@ -535,7 +1169,9 @@
     <div class="title-bar">
         <span>Browser</span>
         <div class="window-controls">
-            <i class="fa-solid fa-xmark" onclick="toggleWindow('browserWindow')"></i>
+            <i class="fa-solid fa-window-minimize" onclick="minimizeWindow('browserWindow')" title="Minimize"></i>
+            <i class="fa-solid fa-window-maximize" onclick="maximizeWindow('browserWindow', this)" title="Maximize"></i>
+            <i class="fa-solid fa-xmark" onclick="toggleWindow('browserWindow')" title="Close"></i>
         </div>
     </div>
     <div class="browser-address-bar">
@@ -545,33 +1181,95 @@
 </div>
   
 
-    <!-- My Projects Window -->
-<div class="window" id="myProjectsWindow">
+
+<!-- File Explorer Window -->
+<div class="window" id="fileExplorerWindow">
     <div class="title-bar">
-        <span>My Projects</span>
+        <span>File Explorer</span>
         <div class="window-controls">
-            <i class="fa-solid fa-xmark" onclick="toggleWindow('myProjectsWindow')"></i>
+            <i class="fa-solid fa-window-minimize" onclick="minimizeWindow('fileExplorerWindow')" title="Minimize"></i>
+            <i class="fa-solid fa-window-maximize" onclick="maximizeWindow('fileExplorerWindow', this)" title="Maximize"></i>
+            <i class="fa-solid fa-xmark" onclick="toggleWindow('fileExplorerWindow')" title="Close"></i>
         </div>
     </div>
-    <div class="content">
-        <div class="text">
-            <h1>My Projects</h1>
-            <div class="projects-container">
-                <div class="project-card">
-                    <h2>3D Portfolio Website</h2>
-                    <p>A fully interactive 3D portfolio using Three.js.</p>
-                    <button onclick="window.open('https://github.com/yourusername/3d-portfolio', '_blank')">View</button>
+    <div class="file-explorer-content">
+        <div class="file-explorer-sidebar">
+            <div class="sidebar-section">
+                <h3>Quick Access</h3>
+                <div class="sidebar-item" onclick="navigateToRootFolder('documents')">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <span>Documents</span>
                 </div>
-                <div class="project-card">
-                    <h2>Interactive UI Designs</h2>
-                    <p>Creative UI/UX designs with smooth animations.</p>
-                    <button onclick="window.open('https://github.com/yourusername/ui-designs', '_blank')">View</button>
+                <div class="sidebar-item" onclick="navigateToRootFolder('pictures')">
+                    <i class="fa-solid fa-image"></i>
+                    <span>Pictures</span>
                 </div>
-                <div class="project-card">
-                    <h2>Flutter Productivity App</h2>
-                    <p>A Flutter app for tracking daily habits & goals.</p>
-                    <button onclick="window.open('https://github.com/yourusername/flutter-app', '_blank')">View</button>
+                <div class="sidebar-item" onclick="navigateToRootFolder('downloads')">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Downloads</span>
                 </div>
+            </div>
+            <div class="sidebar-section">
+                <h3>This PC</h3>
+                <div class="sidebar-item" onclick="navigateToRootFolder('desktop')">
+                    <i class="fa-solid fa-desktop"></i>
+                    <span>Desktop</span>
+        </div>
+                <div class="sidebar-item" onclick="navigateToRootFolder('documents')">
+                    <i class="fa-solid fa-folder"></i>
+                    <span>Documents</span>
+                </div>
+                <div class="sidebar-item" onclick="navigateToRootFolder('pictures')">
+                    <i class="fa-solid fa-folder"></i>
+                    <span>Pictures</span>
+                </div>
+                <div class="sidebar-item" onclick="navigateToRootFolder('music')">
+                    <i class="fa-solid fa-music"></i>
+                    <span>Music</span>
+                </div>
+                <div class="sidebar-item" onclick="navigateToRootFolder('videos')">
+                    <i class="fa-solid fa-video"></i>
+                    <span>Videos</span>
+                </div>
+            </div>
+            <div class="sidebar-section">
+                <h3>Certificates</h3>
+                <div class="sidebar-item" onclick="navigateToRootFolder('certificates')">
+                    <i class="fa-solid fa-award"></i>
+                    <span>Certificates</span>
+                </div>
+            </div>
+        </div>
+        <div class="file-explorer-main">
+            <div class="file-explorer-toolbar">
+                <div class="toolbar-group">
+                    <button class="toolbar-btn" onclick="goBack()" id="backBtn" disabled>
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <button class="toolbar-btn" onclick="goForward()" id="forwardBtn" disabled>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <button class="toolbar-btn" onclick="goUp()" id="upBtn">
+                        <i class="fa-solid fa-arrow-up"></i>
+                    </button>
+                    <button class="toolbar-btn mobile-only" onclick="toggleExplorerSidebar()" title="Folders" style="display:none">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+                <div class="address-bar">
+                    <span id="currentPath">Desktop</span>
+                </div>
+                <div class="toolbar-group">
+                    <button class="toolbar-btn" onclick="refreshView()">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
+                    <button class="toolbar-btn" onclick="openSearchModal()" title="Search files">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="file-explorer-view" id="fileExplorerView">
+                <!-- File and folder content will be loaded here -->
             </div>
         </div>
     </div>
@@ -619,6 +1317,52 @@
     .project-card button:hover {
         background: #0088cc;
     }
+    .window.minimized { display: none !important; }
+    .window.maximized {
+      left: 0 !important;
+      top: 0 !important;
+      width: 100vw !important;
+      height: calc(100vh - 50px) !important;
+      z-index: 9998 !important;
+    }
+    .window.maximized .content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .window.maximized .text {
+      width: 100%;
+      height: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .window.maximized .projects-container {
+      width: 100%;
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      align-items: stretch;
+    }
+    .taskbar-window-btn {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      margin: 0 4px;
+      padding: 4px 12px;
+      font-size: 1em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .taskbar-window-btn:hover {
+      background: rgba(0,0,0,0.25);
+    }
 </style>
 
 
@@ -631,9 +1375,13 @@
             <div class="taskbar-icons">
                 <i class="fa-solid fa-user" onclick="toggleWindow('aboutMeWindow')"></i>
                 <i class="fa-solid fa-envelope" onclick="toggleWindow('contactMeWindow')"></i>
-                <i class="fa-solid fa-folder-open" onclick="toggleWindow('myProjectsWindow')"></i>
+                
+                <i class="fa-solid fa-folder" onclick="toggleWindow('fileExplorerWindow')"></i>
                 <i class="fa-brands fa-chrome" onclick="toggleWindow('browserWindow')"></i>
+                <i class="fa-solid fa-circle-info" onclick="toggleWindow('instructionsWindow')"></i>
             </div>
+
+            <div id="taskbar-windows"></div>
             <div class="time" id="timeDisplay"></div>
         </div>
     </div>    
@@ -690,63 +1438,142 @@
         `;
         document.head.appendChild(style);
 
-        // Wait 2 seconds, then show PC window and remove loader
+        // Wait 2 seconds, then remove loader
         window.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
             document.getElementById("windows-loading")?.remove();
-            document.getElementById("virtual-desktop").style.display = "block"; // ✅ Show only the desktop, not any window
         }, 2000);
         });
 
-        // Power options
+        // Power options (Start Menu)
         const powerIcon = document.getElementById("powerIcon");
         const powerDropdown = document.getElementById("powerDropdown");
 
-        powerIcon.addEventListener("click", () => {
-        powerDropdown.style.display = powerDropdown.style.display === "block" ? "none" : "block";
-        });
+        if (powerIcon && powerDropdown) {
+            powerIcon.addEventListener("click", () => {
+                console.log("Start menu power button clicked!");
+                powerDropdown.classList.toggle("show");
+            });
+        } else {
+            console.error("Start menu power elements not found:", { powerIcon, powerDropdown });
+        }
 
+
+
+        // Function to handle power actions
+        function handlePowerAction(action) {
+            // Hide power dropdown
+            powerDropdown.classList.remove("show");
+            
+            // Show shutdown screen with appropriate message
+            const shutdownScreen = document.getElementById("shutdown-screen");
+            const icon = shutdownScreen.querySelector(".shutdown-icon");
+            const text = shutdownScreen.querySelector(".shutdown-text");
+            const progress = shutdownScreen.querySelector(".shutdown-progress");
+            
+            if (action === "shutdown") {
+                icon.textContent = "🔌";
+                text.textContent = "Shutting down...";
+                progress.style.display = "block";
+                shutdownScreen.style.display = "flex";
+                
+                // Animate progress bar
+                setTimeout(() => {
+                    const progressBar = shutdownScreen.querySelector(".progress-bar");
+                    if (progressBar) progressBar.style.width = "100%";
+                }, 100);
+                
+                // Close PC screen after animation
+                setTimeout(() => {
+                    shutdownScreen.style.display = "none";
+                    console.log("Attempting to close PC screen...");
+                    // Close the desktop overlay by sending message to parent
+                    if (window.parent && window.parent !== window) {
+                        console.log("Sending message to parent window");
+                        window.parent.postMessage({ action: 'closeVirtualDesktop' }, '*');
+                    } else {
+                        console.log("No parent window found, trying direct call");
+                        // Fallback: try to call the function directly if available
+                        if (window.closeVirtualDesktop) {
+                            window.closeVirtualDesktop();
+                        } else {
+                            console.error("closeVirtualDesktop function not available");
+                        }
+                    }
+                }, 3000);
+                
+            } else if (action === "sleep") {
+                icon.textContent = "🛌";
+                text.textContent = "Going to sleep...";
+                progress.style.display = "none";
+                shutdownScreen.style.display = "flex";
+                
+                // Close PC screen after sleep animation
+                setTimeout(() => {
+                    shutdownScreen.style.display = "none";
+                    console.log("Attempting to close PC screen after sleep...");
+                    // Close the desktop overlay by sending message to parent
+                    if (window.parent && window.parent !== window) {
+                        console.log("Sending message to parent window");
+                        window.parent.postMessage({ action: 'closeVirtualDesktop' }, '*');
+                    } else {
+                        console.log("No parent window found, trying direct call");
+                        // Fallback: try to call the function directly if available
+                        if (window.closeVirtualDesktop) {
+                            window.closeVirtualDesktop();
+                        } else {
+                            console.error("closeVirtualDesktop function not available");
+                        }
+                    }
+                }, 2500);
+                
+            } else if (action === "restart") {
+                icon.textContent = "🔄";
+                text.textContent = "Restarting...";
+                progress.style.display = "none";
+                shutdownScreen.style.display = "flex";
+                
+                // Close PC screen after restart animation
+                setTimeout(() => {
+                    shutdownScreen.style.display = "none";
+                    console.log("Attempting to close PC screen after restart...");
+                    // Close the desktop overlay by sending message to parent
+                    if (window.parent && window.parent !== window) {
+                        console.log("Sending message to parent window");
+                        window.parent.postMessage({ action: 'closeVirtualDesktop' }, '*');
+                    } else {
+                        console.log("No parent window found, trying direct call");
+                        // Fallback: try to call the function directly if available
+                        if (window.closeVirtualDesktop) {
+                            window.closeVirtualDesktop();
+                        } else {
+                            console.error("closeVirtualDesktop function not available");
+                        }
+                    }
+                }, 3000);
+            }
+        }
+
+        // Add event listeners for all power options
         document.querySelectorAll(".power-option").forEach(option => {
             option.addEventListener("click", () => {
                 const action = option.dataset.action;
-                powerDropdown.style.display = "none";
-                const shutdownScreen = document.getElementById("shutdown-screen");
-                const desktopOverlay = document.getElementById("desktop-overlay");
-
-                
-                if (action === "shutdown") {
-                shutdownScreen.style.display = "flex";
-                setTimeout(() => {
-                    desktopOverlay.style.display = "none";
-                    shutdownScreen.style.display = "none";
-                }, 2000); // after animation
-                }
-
-                else if (action === "sleep") {
-                shutdownScreen.querySelector(".shutdown-message").innerText = "Sleeping...";
-                shutdownScreen.style.display = "flex";
-                setTimeout(() => {
-                    shutdownScreen.style.display = "none";
-                }, 2000);
-                }
-
-                else if (action === "restart") {
-                shutdownScreen.querySelector(".shutdown-message").innerText = "Restarting...";
-                shutdownScreen.style.display = "flex";
-                setTimeout(() => {
-                    shutdownScreen.style.display = "none";
-                    location.reload(); // restart desktop
-                }, 2000);
-                }
+                handlePowerAction(action);
             });
-            powerIcon.addEventListener("click", () => {
-                powerDropdown.classList.toggle("show");
-            });
+        });
+        
+        // Close power dropdown when clicking outside
+        document.addEventListener("click", (e) => {
+            if (!powerIcon.contains(e.target) && !powerDropdown.contains(e.target)) {
+                powerDropdown.classList.remove("show");
+            }
         });
 
         function toggleWindow(windowId) {
             const win = document.getElementById(windowId);
             win.classList.toggle('show');
+          win.setAttribute('tabindex', '0');
+          win.setAttribute('aria-label', windowId.replace(/([A-Z])/g, ' $1').trim());
         }
     
         function closeWindow(windowId) {
@@ -760,30 +1587,55 @@
         // Chatbot toggle
         function toggleChatbot() {
             document.getElementById('chatbotWindow').classList.toggle('show');
+          document.getElementById('chatbotWindow').setAttribute('tabindex', '0');
+          document.getElementById('chatbotWindow').setAttribute('aria-label', 'Chatbot Window');
         }
     
-        // Send message to chatbot
+        // Add avatar URLs (use your profile.jpg for user, and a robot emoji or icon for bot)
+        const BOT_AVATAR = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f916.png'; // 🤖
+        // Use a generic user icon for the user avatar
+        const USER_AVATAR = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f464.png'; // 👤
+
+        // --- Contextual Follow-Ups and Quick Reply Buttons ---
+        let lastBotTopic = null;
+
         function sendChat() {
             const input = document.getElementById("chatbotInput");
             const message = input.value.trim();
             if (message === "") return;
-    
             const chatContainer = document.getElementById("chatbotMessages");
-    
+            // User message with avatar
             const userMsg = document.createElement("div");
             userMsg.className = "chatbot-msg user";
-            userMsg.innerText = message;
+            userMsg.innerHTML = `<img src="${USER_AVATAR}" class="chat-avatar user-avatar" alt="User"> <span>${message}</span>`;
             chatContainer.appendChild(userMsg);
-    
             input.value = "";
-    
             showTypingIndicator();
             setTimeout(() => {
                 hideTypingIndicator();
+                // Bot message with avatar and quick replies
+                const { reply, topic, quickReplies } = getBotReplyWithContext(message);
+                lastBotTopic = topic;
                 const botMsg = document.createElement("div");
                 botMsg.className = "chatbot-msg bot";
-                botMsg.innerText = getBotResponse(message);
+                botMsg.innerHTML = `<img src="${BOT_AVATAR}" class="chat-avatar bot-avatar" alt="Bot"> <span>${reply}</span>`;
                 chatContainer.appendChild(botMsg);
+                // Add quick reply buttons if any
+                if (quickReplies && quickReplies.length) {
+                    const quickReplyBar = document.createElement('div');
+                    quickReplyBar.className = 'quick-replies';
+                    quickReplies.forEach(q => {
+                        const btn = document.createElement('button');
+                        btn.className = 'quick-reply-btn';
+                        btn.innerText = q.label;
+                        btn.onclick = () => {
+                            input.value = q.text;
+                            sendChat();
+                        };
+                        quickReplyBar.appendChild(btn);
+                    });
+                    chatContainer.appendChild(quickReplyBar);
+                }
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             }, 1000);
         }
@@ -792,7 +1644,7 @@
             const chatContainer = document.getElementById("chatbotMessages");
             const typing = document.createElement("div");
             typing.className = "chatbot-msg bot typing";
-            typing.innerText = "Typing...";
+            typing.innerHTML = `<img src="${BOT_AVATAR}" class="chat-avatar bot-avatar" alt="Bot"> <span class='typing-dots'><span>.</span><span>.</span><span>.</span></span>`;
             typing.id = "typingIndicator";
             chatContainer.appendChild(typing);
             chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -803,20 +1655,162 @@
             if (typing) typing.remove();
         }
 
-        function getBotResponse(msg) {
+        // Enhanced getBotResponse with fuzzy matching and richer responses
+        function getBotReplyWithContext(msg) {
             msg = msg.toLowerCase();
-
-            if (msg.includes("hi")) return "Hello! How can I help you today?";
-            if (msg.includes("hello")) return "Hi! How can I help you today?";
-            if (msg.includes("who are you")) return "I'm your portfolio assistant!,My name is F.O.A.M 😁";
-            if (msg.includes("project")) return "You can find my projects in the Start Menu → My Projects.";
-            if (msg.includes("skills")) return "Krithik is skilled in Web Dev, AI/ML, and 3D Development!";
-            if (msg.includes("contact")) return "Click 'Contact Me' in the Start Menu to reach out!";
-            if (msg.includes("open")) return "Use the Start Menu below to open different sections.";
-            return "Sorry, I didn’t understand that. Try something like 'What are your projects?'.";
+            // Helper for fuzzy matching
+            function matchAny(keywords) {
+                return keywords.some(k => msg.includes(k));
+            }
+            // Contextual follow-ups
+            if (matchAny(["more", "tell me more", "next", "another", "else?"])) {
+                if (lastBotTopic === 'projects') {
+                    return {
+                        reply: `Here's another project: <a href='https://krithik-s-jpg.github.io/html-tic-tac-toe/' target='_blank'>Tic-Tac-Toe</a> (Classic game). Want to see more?`,
+                        topic: 'projects',
+                        quickReplies: [
+                            { label: 'More Projects', text: 'more projects' },
+                            { label: 'Show Skills', text: 'skills' },
+                            { label: 'Contact Info', text: 'contact' }
+                        ]
+                    };
+                }
+                if (lastBotTopic === 'skills') {
+                    return {
+                        reply: `I'm also skilled in <b>React, Python, Java, SQL, Firebase, MongoDb</b>. Want to know about a specific one?`,
+                        topic: 'skills',
+                        quickReplies: [
+                            { label: 'More Skills', text: 'more skills' },
+                            { label: 'Show Projects', text: 'projects' },
+                            { label: 'Contact Info', text: 'contact' }
+                        ]
+                    };
+                }
+                if (lastBotTopic === 'qualifications') {
+                    return {
+                        reply: `I also completed <b>12th Grade (CBSE)</b> and <b>10th Grade (CBSE)</b> at SBIOA CBSE School.`,
+                        topic: 'qualifications',
+                        quickReplies: [
+                            { label: 'Show Projects', text: 'projects' },
+                            { label: 'Show Skills', text: 'skills' },
+                            { label: 'Contact Info', text: 'contact' }
+                        ]
+                    };
+                }
+            }
+            // Main topics
+            if (matchAny(["project", "work", "portfolio", "build", "made", "created", "showcase"])) {
+                return {
+                    reply: `Here are some of my projects:<br>\
+- <a href='https://preeminent-hummingbird-d00ff5.netlify.app/' target='_blank'>My 3D Portfolio</a> (Interactive 3D portfolio website)<br>\
+- <a href='https://krithik-s-jpg.github.io/Fake-Google/' target='_blank'>Fake Google</a> (Google search clone)<br>\
+- <a href='https://tubular-cendol-2bcd60.netlify.app/' target='_blank'>One Piece</a> (Anime fan site)<br>\
+Want to see more?`,
+                    topic: 'projects',
+                    quickReplies: [
+                        { label: 'More Projects', text: 'more projects' },
+                        { label: 'Show Skills', text: 'skills' },
+                        { label: 'Contact Info', text: 'contact' }
+                    ]
+                };
+            }
+            if (matchAny(["skill", "technolog", "stack", "expertise", "what can you do", "languages", "frameworks"])) {
+                return {
+                    reply: `My main skills are: <b>Html, Css, Js, Node, Three.js</b>. Want to know more?`,
+                    topic: 'skills',
+                    quickReplies: [
+                        { label: 'More Skills', text: 'more skills' },
+                        { label: 'Show Projects', text: 'projects' },
+                        { label: 'Contact Info', text: 'contact' }
+                    ]
+                };
+            }
+            if (matchAny(["qualification", "degree", "education", "study", "school", "college", "background", "academics"])) {
+                return {
+                    reply: `Here are my qualifications:<br>\
+- <b>B.Tech Computer Science and Business System</b> (Saranathan College of Engineering, Trichy, 2023 - Present)<br>\
+Want to know more?`,
+                    topic: 'qualifications',
+                    quickReplies: [
+                        { label: 'More Qualifications', text: 'more qualifications' },
+                        { label: 'Show Projects', text: 'projects' },
+                        { label: 'Show Skills', text: 'skills' }
+                    ]
+                };
+            }
+            if (matchAny(["contact", "email", "linkedin", "github", "reach you", "connect", "social"])) {
+                return {
+                    reply: `You can contact me at <b>2002.krithik@gmail.com</b>.<br>LinkedIn: <a href='https://www.linkedin.com/in/krithik-s-bb99a7332?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app' target='_blank'>Krithik S</a><br>GitHub: <a href='https://github.com/Krithik-S-jpg' target='_blank'>Krithik-S-jpg</a>`,
+                    topic: 'contact',
+                    quickReplies: [
+                        { label: 'Show Projects', text: 'projects' },
+                        { label: 'Show Skills', text: 'skills' },
+                        { label: 'Show Qualifications', text: 'qualifications' }
+                    ]
+                };
+            }
+            // Greetings & small talk
+            if (matchAny(["hi", "hello", "hey", "greetings", "good morning", "good evening", "good afternoon"])) {
+                const greetings = [
+                    "Hello! How can I help you today? 😊",
+                    "Hi there! What would you like to know?",
+                    "Hey! Ask me anything about Krithik's portfolio.",
+                    "Greetings! How can I assist you?"
+                ];
+                return {
+                    reply: greetings[Math.floor(Math.random() * greetings.length)],
+                    topic: 'greeting',
+                    quickReplies: [
+                        { label: 'Show Projects', text: 'projects' },
+                        { label: 'Show Skills', text: 'skills' },
+                        { label: 'Contact Info', text: 'contact' }
+                    ]
+                };
+            }
+            if (matchAny(["who are you", "your name", "what are you", "are you a bot"])) {
+                return {
+                    reply: "I'm F.O.A.M, your friendly portfolio assistant! 🤖",
+                    topic: 'about',
+                    quickReplies: [
+                        { label: 'Show Projects', text: 'projects' },
+                        { label: 'Show Skills', text: 'skills' },
+                        { label: 'Contact Info', text: 'contact' }
+                    ]
+                };
+            }
+            if (matchAny(["joke", "funny", "make me laugh"])) {
+                return {
+                    reply: "Why do programmers prefer dark mode? Because light attracts bugs! 🐞",
+                    topic: 'joke',
+                    quickReplies: [
+                        { label: 'Show Projects', text: 'projects' },
+                        { label: 'Show Skills', text: 'skills' },
+                        { label: 'Contact Info', text: 'contact' }
+                    ]
+                };
+            }
+            if (matchAny(["open", "start menu", "how to use", "help", "what can you do", "options"])) {
+                return {
+                    reply: "Use the Start Menu below to open different sections, or ask me about projects, skills, or contact info!",
+                    topic: 'help',
+                    quickReplies: [
+                        { label: 'Show Projects', text: 'projects' },
+                        { label: 'Show Skills', text: 'skills' },
+                        { label: 'Contact Info', text: 'contact' }
+                    ]
+                };
+            }
+            // Fallback
+            return {
+                reply: "Sorry, I didn't understand that. Try asking about <b>projects</b>, <b>skills</b>, <b>contact</b>, or <b>qualifications</b>.",
+                topic: 'unknown',
+                quickReplies: [
+                    { label: 'Show Projects', text: 'projects' },
+                    { label: 'Show Skills', text: 'skills' },
+                    { label: 'Contact Info', text: 'contact' }
+                ]
+            };
         }
-
-
     
         // Pressing enter triggers sendChat()
         function handleChat(e) {
@@ -837,28 +1831,188 @@
             toggleWindow('browserWindow');
         }
 
-        // Make windows draggable
+        // --- Taskbar window buttons logic ---
+        const windowList = [
+          { id: 'aboutMeWindow', icon: 'fa-user', label: 'About' },
+          { id: 'contactMeWindow', icon: 'fa-envelope', label: 'Contact' },
+          { id: 'fileExplorerWindow', icon: 'fa-folder', label: 'File Explorer' },
+          { id: 'browserWindow', icon: 'fa-chrome', label: 'Browser' },
+          { id: 'instructionsWindow', icon: 'fa-circle-info', label: 'Instructions' }
+        ];
+
+        function showTaskbarButton(windowId) {
+          const taskbar = document.getElementById('taskbar-windows');
+          if (taskbar.querySelector(`[data-window='${windowId}']`)) return; // Already exists
+          const winMeta = windowList.find(w => w.id === windowId);
+          const btn = document.createElement('button');
+          btn.className = 'taskbar-window-btn';
+          btn.setAttribute('data-window', windowId);
+          btn.innerHTML = `<i class="fa-solid ${winMeta.icon}"></i> ${winMeta.label}`;
+          btn.onclick = () => restoreWindow(windowId);
+          taskbar.appendChild(btn);
+        }
+
+        function hideTaskbarButton(windowId) {
+          const taskbar = document.getElementById('taskbar-windows');
+          const btn = taskbar.querySelector(`[data-window='${windowId}']`);
+          if (btn) btn.remove();
+        }
+
+        function minimizeWindow(windowId) {
+          const win = document.getElementById(windowId);
+          win.classList.remove('show');
+          win.classList.add('minimized');
+          showTaskbarButton(windowId);
+        }
+
+        function restoreWindow(windowId) {
+          const win = document.getElementById(windowId);
+          win.classList.add('show');
+          win.classList.remove('minimized');
+          hideTaskbarButton(windowId);
+          focusWindow(win);
+        }
+
+        function maximizeWindow(windowId, btn) {
+          const win = document.getElementById(windowId);
+          if (!win.classList.contains('maximized')) {
+            // Save previous state
+            win.dataset.prevLeft = win.style.left;
+            win.dataset.prevTop = win.style.top;
+            win.dataset.prevWidth = win.style.width;
+            win.dataset.prevHeight = win.style.height;
+            win.dataset.prevPosition = win.style.position || 'absolute';
+            win.style.position = 'fixed';
+            win.style.left = '0';
+            win.style.top = '0';
+            win.style.width = '100vw';
+            win.style.height = `calc(100vh - 50px)`;
+            win.classList.add('maximized');
+            btn.classList.remove('fa-window-maximize');
+            btn.classList.add('fa-window-restore');
+            btn.title = 'Restore';
+            focusWindow(win);
+          } else {
+            // Restore previous state
+            win.style.position = win.dataset.prevPosition || 'absolute';
+            win.style.left = win.dataset.prevLeft || '';
+            win.style.top = win.dataset.prevTop || '';
+            win.style.width = win.dataset.prevWidth || '';
+            win.style.height = win.dataset.prevHeight || '';
+            win.classList.remove('maximized');
+            btn.classList.remove('fa-window-restore');
+            btn.classList.add('fa-window-maximize');
+            btn.title = 'Maximize';
+            focusWindow(win);
+          }
+        }
+
+        // Mobile sidebar toggle for File Explorer
+        window.toggleExplorerSidebar = function() {
+          const win = document.getElementById('fileExplorerWindow');
+          if (!win) return;
+          win.classList.toggle('sidebar-open');
+        }
+
+        // Keep maximized windows sized on window resize
+        window.addEventListener('resize', () => {
+          document.querySelectorAll('.window.maximized').forEach(win => {
+            win.style.width = '100vw';
+            win.style.height = `calc(100vh - 50px)`;
+          });
+        });
+
+        // Patch toggleWindow to hide taskbar button when closed
+        window.toggleWindow = function(windowId) {
+          const win = document.getElementById(windowId);
+          win.classList.toggle('show');
+          win.classList.remove('minimized');
+          if (!win.classList.contains('show')) hideTaskbarButton(windowId);
+          win.setAttribute('tabindex', '0');
+          win.setAttribute('aria-label', windowId.replace(/([A-Z])/g, ' $1').trim());
+          if (win.classList.contains('show')) focusWindow(win);
+        }
+
+        // Bring window to front
+        function focusWindow(win) {
+          // Find current max z-index among windows
+          let maxZ = 1000;
+          document.querySelectorAll('.window').forEach(w => {
+            const z = parseInt(w.style.zIndex) || 1000;
+            if (z > maxZ) maxZ = z;
+          });
+          // Toggle active class for title bar highlight
+          document.querySelectorAll('.window').forEach(w => w.classList.remove('active'));
+          win.classList.add('active');
+          win.style.zIndex = maxZ + 1;
+        }
+
         document.querySelectorAll('.window').forEach(win => {
-            const header = win.querySelector('.window-header');
+          const header = win.querySelector('.title-bar');
+          if (!header) return;
             let isDragging = false;
             let offsetX, offsetY;
-
             header.addEventListener('mousedown', (e) => {
                 isDragging = true;
                 offsetX = e.clientX - win.offsetLeft;
                 offsetY = e.clientY - win.offsetTop;
-                win.style.zIndex = Date.now(); // Bring to front
+            focusWindow(win);
+            e.preventDefault();
             });
-
             document.addEventListener('mouseup', () => {
                 isDragging = false;
             });
-
             document.addEventListener('mousemove', (e) => {
                 if (!isDragging) return;
-                win.style.left = `${e.clientX - offsetX}px`;
-                win.style.top = `${e.clientY - offsetY}px`;
+            let newLeft = e.clientX - offsetX;
+            let newTop = e.clientY - offsetY;
+            // Constrain top
+            if (newTop < 0) newTop = 0;
+            // Constrain so title bar doesn't go below taskbar
+            const titleBarHeight = header.offsetHeight;
+            const maxTop = window.innerHeight - 50 - titleBarHeight;
+            if (newTop > maxTop) newTop = maxTop;
+            // Constrain left
+            if (newLeft < 0) newLeft = 0;
+            // Constrain right
+            const maxLeft = window.innerWidth - win.offsetWidth;
+            if (newLeft > maxLeft) newLeft = maxLeft;
+            win.style.left = `${newLeft}px`;
+            win.style.top = `${newTop}px`;
+          });
+          // Bring to front on click
+          win.addEventListener('mousedown', () => focusWindow(win));
+          // Double-click title bar to toggle maximize
+          header.addEventListener('dblclick', () => {
+            const maxBtn = win.querySelector('.window-controls .fa-window-restore, .window-controls .fa-window-maximize');
+            if (maxBtn) maximizeWindow(win.id, maxBtn);
+          });
+          // Add resizer handle
+          if (!win.querySelector('.window-resizer')) {
+            const resizer = document.createElement('div');
+            resizer.className = 'window-resizer';
+            win.appendChild(resizer);
+            let resizing = false, startX = 0, startY = 0, startW = 0, startH = 0;
+            resizer.addEventListener('mousedown', (e) => {
+              if (win.classList.contains('maximized')) return; // no resize when maximized
+              resizing = true;
+              startX = e.clientX; startY = e.clientY;
+              startW = win.offsetWidth; startH = win.offsetHeight;
+              document.body.style.userSelect = 'none';
+              e.preventDefault();
             });
+            document.addEventListener('mousemove', (e) => {
+              if (!resizing) return;
+              const newW = Math.max(280, startW + (e.clientX - startX));
+              const newH = Math.max(160, startH + (e.clientY - startY));
+              win.style.width = newW + 'px';
+              win.style.height = newH + 'px';
+            });
+            document.addEventListener('mouseup', () => {
+              resizing = false;
+              document.body.style.userSelect = '';
+            });
+          }
         });
 
         setTimeout(() => {
@@ -866,14 +2020,1065 @@
             if (welcome) welcome.remove();
         }, 5000);
 
+        // Global keyboard shortcuts: Esc to close Start Menu, Ctrl+Esc to toggle
+        document.addEventListener('keydown', (e) => {
+          const startMenu = document.getElementById('startMenu');
+          if (e.key === 'Escape') {
+            startMenu?.classList.remove('show');
+          }
+          if (e.key === 'Escape' && e.ctrlKey) {
+            startMenu?.classList.toggle('show');
+          }
+        });
+
         // Update time every 30 seconds
         updateTime();
         setInterval(updateTime, 30000);
+
+        // Add styles for avatars and typing animation
+        const chatAvatarStyle = document.createElement('style');
+        chatAvatarStyle.textContent = `
+        .chat-avatar {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          object-fit: cover;
+          margin-right: 10px;
+          vertical-align: middle;
+          background: #fff;
+          border: 2px solid #eee;
+        }
+        .user-avatar { border: 2px solid #00aaff; }
+        .bot-avatar { border: 2px solid #888; }
+        .chatbot-msg {
+          display: flex;
+          align-items: flex-start;
+          gap: 8px;
+        }
+        .chatbot-msg span { display: inline-block; max-width: 80%; word-break: break-word; }
+        .typing-dots span {
+          display: inline-block;
+          font-size: 1.5em;
+          animation: blink 1s infinite alternate;
+          color: #888;
+        }
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes blink {
+          0% { opacity: 0.2; }
+          100% { opacity: 1; }
+        }
+        `;
+        document.head.appendChild(chatAvatarStyle);
+
+        // --- Quick Reply Button Styles ---
+        const quickReplyStyle = document.createElement('style');
+        quickReplyStyle.textContent = `
+        .quick-replies {
+          display: flex;
+          gap: 10px;
+          margin: 8px 0 0 44px;
+        }
+        .quick-reply-btn {
+          background: linear-gradient(90deg, #00aaff 60%, #0078D7 100%);
+          color: #fff;
+          border: none;
+          border-radius: 16px;
+          padding: 6px 16px;
+          font-size: 1em;
+          cursor: pointer;
+          box-shadow: 0 2px 8px #00aaff22;
+          transition: background 0.2s, transform 0.1s;
+        }
+        .quick-reply-btn:hover {
+          background: linear-gradient(90deg, #0078D7 60%, #00aaff 100%);
+          transform: scale(1.08);
+        }
+        `;
+        document.head.appendChild(quickReplyStyle);
+
+        // 1. Add a clear chat button to the chatbot header
+        // 2. Make the chatbot window draggable and resizable
+        // 3. Polish the appearance
+
+        // --- Add Clear Chat Button ---
+        // In the .chatbot-header div, add:
+        // <button id="clearChatBtn" title="Clear Chat">🧹</button>
+        document.addEventListener('DOMContentLoaded', function() {
+          const header = document.querySelector('.chatbot-header');
+          if (header && !document.getElementById('clearChatBtn')) {
+            const clearBtn = document.createElement('button');
+            clearBtn.id = 'clearChatBtn';
+            clearBtn.title = 'Clear Chat';
+            clearBtn.innerText = '🧹';
+            clearBtn.style.background = 'none';
+            clearBtn.style.border = 'none';
+            clearBtn.style.fontSize = '1.2em';
+            clearBtn.style.cursor = 'pointer';
+            clearBtn.style.marginLeft = '8px';
+            clearBtn.style.color = 'white';
+            clearBtn.addEventListener('click', function() {
+              document.getElementById('chatbotMessages').innerHTML = '<div class="chatbot-msg bot"><img src="'+BOT_AVATAR+'" class="chat-avatar bot-avatar" alt="Bot"> <span>Hello! How can I assist you today?</span></div>';
+            });
+            header.appendChild(clearBtn);
+          }
+        });
+
+        // --- Make Chatbot Window Draggable ---
+        (function makeChatbotDraggable() {
+          const chatbot = document.getElementById('chatbotWindow');
+          const header = chatbot.querySelector('.chatbot-header');
+          let isDragging = false, offsetX = 0, offsetY = 0;
+          header.style.cursor = 'move';
+          header.addEventListener('mousedown', function(e) {
+            isDragging = true;
+            offsetX = e.clientX - chatbot.offsetLeft;
+            offsetY = e.clientY - chatbot.offsetTop;
+            chatbot.style.transition = 'none';
+            document.body.style.userSelect = 'none';
+          });
+          document.addEventListener('mousemove', function(e) {
+            if (!isDragging) return;
+            chatbot.style.left = (e.clientX - offsetX) + 'px';
+            chatbot.style.top = (e.clientY - offsetY) + 'px';
+            chatbot.style.right = 'auto';
+            chatbot.style.bottom = 'auto';
+            chatbot.style.position = 'fixed';
+          });
+          document.addEventListener('mouseup', function() {
+            isDragging = false;
+            chatbot.style.transition = '';
+            document.body.style.userSelect = '';
+          });
+        })();
+
+        // --- Make Chatbot Window Resizable ---
+        (function makeChatbotResizable() {
+          const chatbot = document.getElementById('chatbotWindow');
+          const resizer = document.createElement('div');
+          resizer.className = 'chatbot-resizer';
+          chatbot.appendChild(resizer);
+          let isResizing = false, startX, startY, startW, startH;
+          resizer.addEventListener('mousedown', function(e) {
+            isResizing = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startW = chatbot.offsetWidth;
+            startH = chatbot.offsetHeight;
+            document.body.style.userSelect = 'none';
+            e.preventDefault();
+          });
+          document.addEventListener('mousemove', function(e) {
+            if (!isResizing) return;
+            chatbot.style.width = (startW + (e.clientX - startX)) + 'px';
+            chatbot.style.height = (startH + (e.clientY - startY)) + 'px';
+          });
+          document.addEventListener('mouseup', function() {
+            isResizing = false;
+            document.body.style.userSelect = '';
+          });
+        })();
+
+        // --- Add Modern Styles ---
+        const chatbotEnhanceStyle = document.createElement('style');
+        chatbotEnhanceStyle.textContent = `
+        .chatbot-window {
+          border-radius: 18px !important;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.35) !important;
+          border: 1.5px solid #00aaff33;
+          min-width: 260px;
+          min-height: 180px;
+          resize: none;
+          overflow: hidden;
+        }
+        .chatbot-header {
+          border-radius: 18px 18px 0 0 !important;
+          background: linear-gradient(90deg, #0078D7 60%, #00aaff 100%) !important;
+          box-shadow: 0 2px 8px #0002;
+          cursor: move;
+        }
+        #clearChatBtn:hover {
+          background: #00aaff22;
+        }
+        .chatbot-resizer {
+          width: 18px;
+          height: 18px;
+          background: url('data:image/svg+xml;utf8,<svg width="18" height="18" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="15" x2="15" y2="3" stroke="%2300aaff" stroke-width="2"/><line x1="7" y1="15" x2="15" y2="7" stroke="%2300aaff" stroke-width="2"/></svg>') no-repeat center center;
+          position: absolute;
+          right: 0; bottom: 0;
+          cursor: se-resize;
+          z-index: 10;
+          opacity: 0.7;
+        }
+        .chatbot-resizer:hover { opacity: 1; }
+        `;
+        document.head.appendChild(chatbotEnhanceStyle);
+
+        // --- Modern Chatbot UI Enhancements ---
+        const chatbotModernStyle = document.createElement('style');
+        chatbotModernStyle.textContent = `
+        /* Glassmorphism for chatbot window */
+        .chatbot-window {
+          background: rgba(30, 34, 90, 0.55) !important;
+          backdrop-filter: blur(16px) saturate(180%);
+          -webkit-backdrop-filter: blur(16px) saturate(180%);
+          border-radius: 22px !important;
+          box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37) !important;
+          border: 1.5px solid rgba(255,255,255,0.18);
+          min-width: 280px;
+          min-height: 200px;
+          overflow: hidden;
+          padding-bottom: 0;
+        }
+        /* Header with bot name and status */
+        .chatbot-header {
+          border-radius: 22px 22px 0 0 !important;
+          background: linear-gradient(90deg, #0078D7 60%, #00aaff 100%) !important;
+          box-shadow: 0 2px 8px #0002;
+          cursor: move;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 1.1em;
+          font-weight: 600;
+          letter-spacing: 0.5px;
+          padding-left: 16px;
+        }
+        .chatbot-header::before {
+          content: 'F.O.A.M';
+          color: #fff;
+          font-weight: bold;
+          font-size: 1.1em;
+          margin-right: 10px;
+        }
+        #clearChatBtn {
+          margin-left: auto;
+        }
+        #clearChatBtn:hover {
+          background: #00aaff22;
+        }
+        /* Bot status */
+        .chatbot-status {
+          color: #e0f7fa;
+          font-size: 0.9em;
+          margin-left: 6px;
+          font-weight: 400;
+          opacity: 0.85;
+        }
+        /* Chat area background */
+        #chatbotMessages {
+          background: linear-gradient(135deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.09) 100%);
+          padding: 12px 8px 12px 8px;
+          border-radius: 0 0 18px 18px;
+          min-height: 120px;
+          max-height: 220px;
+          overflow-y: auto;
+          box-shadow: 0 2px 8px #0001 inset;
+        }
+        /* Animated chat bubbles */
+        .chatbot-msg {
+          display: flex;
+          align-items: flex-end;
+          gap: 8px;
+          margin-bottom: 8px;
+          opacity: 0;
+          transform: translateY(20px);
+          animation: bubbleIn 0.5s cubic-bezier(.4,2,.6,1) forwards;
+        }
+        @keyframes bubbleIn {
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        /* Speech bubbles with tails */
+        .chatbot-msg span {
+          display: inline-block;
+          max-width: 80%;
+          word-break: break-word;
+          padding: 10px 16px;
+          border-radius: 18px;
+          background: rgba(255,255,255,0.85);
+          color: #222;
+          position: relative;
+          font-size: 1em;
+          box-shadow: 0 2px 8px #0001;
+        }
+        .chatbot-msg.user span {
+          background: linear-gradient(90deg, #00aaff 60%, #0078D7 100%);
+          color: #fff;
+          align-self: flex-end;
+        }
+        .chatbot-msg.user span::after {
+          content: '';
+          position: absolute;
+          right: -10px; bottom: 8px;
+          border-width: 8px 0 8px 10px;
+          border-style: solid;
+          border-color: transparent transparent transparent #00aaff;
+        }
+        .chatbot-msg.bot span::after {
+          content: '';
+          position: absolute;
+          left: -10px; bottom: 8px;
+          border-width: 8px 10px 8px 0;
+          border-style: solid;
+          border-color: transparent #fff transparent transparent;
+        }
+        /* Glowing bot avatar */
+        .bot-avatar {
+          border: 2px solid #00aaff;
+          box-shadow: 0 0 8px #00aaff88, 0 0 0 #fff;
+          animation: botGlow 1.5s infinite alternate;
+        }
+        @keyframes botGlow {
+          0% { box-shadow: 0 0 8px #00aaff88, 0 0 0 #fff; }
+          100% { box-shadow: 0 0 16px #00aaffcc, 0 0 8px #fff3; }
+        }
+        .user-avatar {
+          border: 2px solid #fff;
+          box-shadow: 0 0 4px #0078d7aa;
+        }
+        /* Stylish input area */
+        .chatbot-input {
+          background: rgba(255,255,255,0.7);
+          border-radius: 0 0 18px 18px;
+          box-shadow: 0 -2px 8px #0001 inset;
+          padding: 10px 10px 10px 16px;
+          display: flex;
+          gap: 8px;
+        }
+        .chatbot-input input {
+          border-radius: 12px;
+          border: 1.5px solid #00aaff44;
+          padding: 8px 12px;
+          font-size: 1em;
+          outline: none;
+          box-shadow: 0 1px 4px #00aaff11;
+          transition: border 0.2s;
+        }
+        .chatbot-input input:focus {
+          border: 1.5px solid #00aaff;
+        }
+        .chatbot-input button {
+          border-radius: 12px;
+          background: linear-gradient(90deg, #00aaff 60%, #0078D7 100%);
+          color: #fff;
+          border: none;
+          padding: 8px 14px;
+          font-size: 1.1em;
+          cursor: pointer;
+          box-shadow: 0 2px 8px #00aaff22;
+          transition: background 0.2s, transform 0.1s;
+        }
+        .chatbot-input button:hover {
+          background: linear-gradient(90deg, #0078D7 60%, #00aaff 100%);
+          transform: scale(1.08);
+        }
+        `;
+        document.head.appendChild(chatbotModernStyle);
+
+        // --- File Explorer Functionality ---
+        
+        // File system data structure
+        const fileSystem = {
+          desktop: {
+            name: 'Desktop',
+            type: 'folder',
+            children: {
+              'about-me.html': { name: 'About Me', type: 'document', icon: 'fa-file-lines', content: 'About Me application' },
+              'profile.jpg': { name: 'Profile Photo', type: 'image', icon: 'fa-image', content: 'public/files/pictures/profile.jpg' },
+              'resume.pdf': { name: 'Resume', type: 'document', icon: 'fa-file-pdf', content: 'public/files/resume/resume.pdf' }
+            }
+          },
+          documents: {
+            name: 'Documents',
+            type: 'folder',
+            children: {
+              'resume.pdf': { name: 'Resume.pdf', type: 'document', icon: 'fa-file-pdf', content: 'public/files/resume/resume.pdf' },
+              'cover-letter.docx': { name: 'Cover Letter', type: 'document', icon: 'fa-file-word', content: 'public/files/documents/cover-letter.docx' },
+              'portfolio-details.txt': { name: 'Portfolio Details', type: 'document', icon: 'fa-file-lines', content: 'public/files/documents/portfolio-details.txt' }
+            }
+          },
+          pictures: {
+            name: 'Pictures',
+            type: 'folder',
+            children: {
+              'profile.jpg': { name: 'Profile Photo', type: 'image', icon: 'fa-image', content: 'public/files/pictures/profile.jpg' },
+              'project-screenshots': {
+                name: 'Project Screenshots',
+                type: 'folder',
+                children: {
+                  'portfolio-3d.jpg': { name: '3D Portfolio', type: 'image', icon: 'fa-image', content: 'public/files/pictures/project-screenshots/portfolio-3d.jpg' },
+                  'google-clone.jpg': { name: 'Google Clone', type: 'image', icon: 'fa-image', content: 'public/files/pictures/project-screenshots/google-clone.jpg' },
+                  'one-piece-site.jpg': { name: 'One Piece Site', type: 'image', icon: 'fa-image', content: 'public/files/pictures/project-screenshots/one-piece-site.jpg' }
+                }
+              },
+              'certificates': {
+                name: 'Certificates',
+                type: 'folder',
+                children: {
+                  'Vdart_intern.pdf': {
+                    name: 'Vdart Intern.pdf',
+                    type: 'document',
+                    icon: 'fa-file-pdf',
+                    content: 'public/files/certificates/Vdart_intern.pdf'
+                  }
+                }
+              }
+            }
+          },
+          downloads: {
+            name: 'Downloads',
+            type: 'folder',
+            children: {
+              'project-files': {
+                name: 'Project Files',
+                type: 'folder',
+                children: {
+                  'portfolio-source.zip': { name: 'Portfolio Source', type: 'document', icon: 'fa-file-zipper', content: 'public/files/documents/portfolio-source.zip' },
+                  'project-demo.mp4': { name: 'Project Demo', type: 'video', icon: 'fa-video', content: 'public/files/videos/project-demo.mp4' }
+                }
+              }
+            }
+          },
+          music: {
+            name: 'Music',
+            type: 'folder',
+            children: {
+              'background-music.mp3': { name: 'Background Music', type: 'audio', icon: 'fa-music', content: 'public/files/audio/background-music.mp3' }
+            }
+          },
+          videos: {
+            name: 'Videos',
+            type: 'folder',
+            children: {
+              'portfolio-demo.mp4': { name: 'Portfolio Demo', type: 'video', icon: 'fa-video', content: 'public/files/videos/portfolio-demo.mp4' },
+              'project-showcase.mp4': { name: 'Project Showcase', type: 'video', icon: 'fa-video', content: 'public/files/videos/project-showcase.mp4' }
+            }
+          },
+          certificates: {
+            name: 'Certificates',
+            type: 'folder',
+            children: {
+              // Example entries; replace with your real PDFs
+              'html-foundation.pdf': { name: 'HTML Foundation.pdf', type: 'document', icon: 'fa-file-pdf', content: 'public/files/certificates/html-foundation.pdf' },
+              'css-advanced.pdf': { name: 'CSS Advanced.pdf', type: 'document', icon: 'fa-file-pdf', content: 'public/files/certificates/css-advanced.pdf' },
+              'react-cert.pdf': { name: 'React Certificate.pdf', type: 'document', icon: 'fa-file-pdf', content: 'public/files/certificates/react-cert.pdf' },
+              'Vdart_intern.pdf': {
+                    name: 'Vdart Intern.pdf',
+                    type: 'document',
+                    icon: 'fa-file-pdf',
+                    content: 'public/files/certificates/Vdart_intern.pdf'
+              }
+            }
+          }
+        };
+
+        // Populate root Certificates from your filenames
+        const certList = [
+          'Codesoft Ui_Ux.pdf',
+          'Eleavaye.pdf',
+          'Ethical_Hacking.pdf',
+          'IBM hackathon.pdf',
+          'Intel hackathon.pdf',
+          'Internpe.pdf',
+          'MongoDb.pdf',
+          'Mount Zion Hackathon.pdf',
+          'My Bharat.pdf',
+          'Nss Anti drug.pdf',
+          'Oasys hackathon.pdf',
+          'Project Management.pdf',
+          'python.pdf',
+          'Python in Udemy.pdf',
+          'Ramakrishna hackathon.pdf',
+          'SIH 2024.pdf',
+          'Sip Abacus.pdf',
+          'Srishti.pdf',
+          'Suits certificate.pdf',
+          'Vdart_intern.pdf'
+        ];
+
+        (function populateCertificates() {
+          if (!fileSystem.certificates) {
+            fileSystem.certificates = { name: 'Certificates', type: 'folder', children: {} };
+          }
+          const children = {};
+          certList.forEach(name => {
+            children[name] = {
+              name,
+              type: 'document',
+              icon: 'fa-file-pdf',
+              content: `public/files/certificates/${encodeURIComponent(name)}`
+            };
+          });
+          fileSystem.certificates.children = children;
+        })();
+
+        // Navigation state
+        let currentPath = ['desktop'];
+        let navigationHistory = [];
+        let historyIndex = -1;
+
+        // Initialize File Explorer
+        document.addEventListener('DOMContentLoaded', function() {
+          loadFileExplorer();
+        });
+
+        function loadFileExplorer() {
+          const view = document.getElementById('fileExplorerView');
+          if (view) {
+            // Initialize properly without calling navigateToFolder
+            currentPath = ['desktop'];
+            navigationHistory = [['desktop']];
+            historyIndex = 0;
+            updateFileExplorerView();
+            updateNavigationButtons();
+            updateAddressBar();
+            updateSidebarActiveState();
+          }
+        }
+
+        function navigateToFolder(folderName) {
+          // Validate if the folder exists
+          const newPath = [...currentPath, folderName];
+          const targetFolder = getFolderByPath(newPath);
+          
+          if (!targetFolder || targetFolder.type !== 'folder') {
+            console.error('Invalid folder path:', newPath);
+            return;
+          }
+
+          currentPath = newPath;
+          
+          // Add to history
+          if (historyIndex < navigationHistory.length - 1) {
+            navigationHistory = navigationHistory.slice(0, historyIndex + 1);
+          }
+          navigationHistory.push([...newPath]);
+          historyIndex = navigationHistory.length - 1;
+          
+          updateFileExplorerView();
+          updateNavigationButtons();
+          updateAddressBar();
+          updateSidebarActiveState();
+        }
+
+        function goBack() {
+          if (historyIndex > 0) {
+            historyIndex--;
+            currentPath = [...navigationHistory[historyIndex]];
+            updateFileExplorerView();
+            updateNavigationButtons();
+            updateAddressBar();
+            updateSidebarActiveState();
+          }
+        }
+
+        function goForward() {
+          if (historyIndex < navigationHistory.length - 1) {
+            historyIndex++;
+            currentPath = [...navigationHistory[historyIndex]];
+            updateFileExplorerView();
+            updateNavigationButtons();
+            updateAddressBar();
+            updateSidebarActiveState();
+          }
+        }
+
+        function goUp() {
+          if (currentPath.length > 1) {
+            const newPath = currentPath.slice(0, -1);
+            currentPath = newPath;
+            
+            // Add to history
+            if (historyIndex < navigationHistory.length - 1) {
+              navigationHistory = navigationHistory.slice(0, historyIndex + 1);
+            }
+            navigationHistory.push([...newPath]);
+            historyIndex = navigationHistory.length - 1;
+            
+            updateFileExplorerView();
+            updateNavigationButtons();
+            updateAddressBar();
+            updateSidebarActiveState();
+          }
+        }
+
+        function updateNavigationButtons() {
+          const backBtn = document.getElementById('backBtn');
+          const forwardBtn = document.getElementById('forwardBtn');
+          const upBtn = document.getElementById('upBtn');
+          
+          if (backBtn) backBtn.disabled = historyIndex <= 0;
+          if (forwardBtn) forwardBtn.disabled = historyIndex >= navigationHistory.length - 1;
+          if (upBtn) upBtn.disabled = currentPath.length <= 1;
+        }
+
+        function updateAddressBar() {
+          const addressBar = document.getElementById('currentPath');
+          if (addressBar) {
+            const pathNames = currentPath.map((path, index) => {
+              const pathArray = currentPath.slice(0, index + 1);
+              const folder = getFolderByPath(pathArray);
+              return folder ? folder.name : path;
+            });
+            addressBar.textContent = pathNames.join(' > ');
+          }
+        }
+
+        function updateSidebarActiveState() {
+          // Remove active class from all sidebar items
+          document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.classList.remove('active');
+          });
+          
+          // Add active class to current path
+          const currentFolderName = currentPath[currentPath.length - 1];
+          const sidebarItems = document.querySelectorAll('.sidebar-item');
+          sidebarItems.forEach(item => {
+            const itemText = item.querySelector('span').textContent.toLowerCase();
+            if (itemText === currentFolderName) {
+              item.classList.add('active');
+            }
+          });
+        }
+
+        function getFolderByPath(pathArray) {
+          if (!Array.isArray(pathArray)) {
+            console.error('getFolderByPath expects an array, got:', typeof pathArray);
+            return null;
+          }
+          
+          let current = fileSystem;
+          
+          for (const path of pathArray) {
+            // Check if it's a direct property of the current object
+            if (current[path]) {
+              current = current[path];
+            } else if (current.children && current.children[path]) {
+              current = current.children[path];
+            } else {
+              return null;
+            }
+          }
+          return current;
+        }
+
+        function updateFileExplorerView() {
+          const view = document.getElementById('fileExplorerView');
+          if (!view) return;
+
+          const currentFolder = getFolderByPath(currentPath);
+          
+          if (!currentFolder || !currentFolder.children) {
+            view.innerHTML = '<div style="padding: 20px; text-align: center; color: #6c757d;">This folder is empty</div>';
+            return;
+          }
+
+          const files = Object.entries(currentFolder.children);
+          
+          view.innerHTML = files.map(([key, file]) => {
+            const iconClass = getFileIcon(file);
+            const fileClass = getFileClass(file);
+            
+            // Safe JSON stringify with proper escaping
+            const safeFileData = JSON.stringify(file).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            
+            return `
+              <div class="file-item ${fileClass}" onclick="handleFileClick('${key}', '${safeFileData}')">
+                <i class="fa-solid ${iconClass}"></i>
+                <span>${file.name}</span>
+              </div>
+            `;
+          }).join('');
+        }
+
+        function getFileIcon(file) {
+          if (file.type === 'folder') return 'fa-folder';
+          if (file.type === 'image') return 'fa-image';
+          if (file.type === 'video') return 'fa-video';
+          if (file.type === 'audio') return 'fa-music';
+          if (file.type === 'certificate') return 'fa-certificate';
+          if (file.type === 'resume') return 'fa-file-pdf';
+          if (file.type === 'document') {
+            if (file.name.includes('.pdf')) return 'fa-file-pdf';
+            if (file.name.includes('.doc')) return 'fa-file-word';
+            if (file.name.includes('.zip')) return 'fa-file-zipper';
+            if (file.name.includes('.txt')) return 'fa-file-lines';
+            return 'fa-file-lines';
+          }
+          return 'fa-file';
+        }
+
+        function getFileClass(file) {
+          if (file.type === 'folder') return 'folder';
+          if (file.type === 'image') return 'image';
+          if (file.type === 'video') return 'video';
+          if (file.type === 'audio') return 'audio';
+          if (file.type === 'certificate') return 'certificate';
+          if (file.type === 'resume') return 'resume';
+          if (file.type === 'document') {
+            if (file.name.includes('.pdf')) return 'pdf';
+            if (file.name.includes('.zip')) return 'document';
+            return 'document';
+          }
+          return 'document';
+        }
+
+        function handleFileClick(fileKey, fileDataString) {
+          try {
+            // Decode the file data
+            const file = JSON.parse(fileDataString.replace(/&quot;/g, '"').replace(/&#39;/g, "'"));
+            
+            if (file.type === 'folder') {
+              navigateToFolder(fileKey);
+            } else {
+              showFilePreview(file);
+            }
+          } catch (error) {
+            console.error('Error parsing file data:', error);
+          }
+        }
+
+        function showFilePreview(file) {
+          const modal = document.createElement('div');
+          modal.className = 'file-preview-modal';
+          
+          let content = '';
+          if (file.type === 'image') {
+            content = `<img src="${file.content}" alt="${file.name}" class="file-preview-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div style="display:none; padding: 20px; text-align: center; color: #6c757d;">Image not available</div>`;
+          } else if (file.type === 'video') {
+            content = `<video controls class="file-preview-image"><source src="${file.content}" type="video/mp4">Video not available</video>`;
+          } else if (file.type === 'audio') {
+            content = `<audio controls style="width: 100%; margin: 10px 0;"><source src="${file.content}" type="audio/mpeg">Audio not available</audio>`;
+          } else if (file.type === 'document') {
+            const nameLower = (file.name || '').toLowerCase();
+            const pathLower = (file.content || '').toLowerCase();
+
+            // PDF: embed viewer
+            if (nameLower.endsWith('.pdf') || pathLower.endsWith('.pdf')) {
+              content = `
+                <iframe src="${file.content}" class="file-preview-pdf" title="${file.name}"></iframe>
+                <div style="margin-top: 8px;">
+                  <a href="${file.content}" target="_blank" rel="noopener">Open in new tab</a>
+                </div>
+              `;
+            }
+            // Plain text: fetch and render
+            else if (nameLower.endsWith('.txt') || nameLower.endsWith('.md')) {
+              content = `<div class="file-preview-text">Loading file content...</div>`;
+              fetch(file.content)
+                .then(r => r.text())
+                .then(text => {
+                  const el = modal.querySelector('.file-preview-text');
+                  if (el) {
+                    el.innerHTML = `<pre style="white-space: pre-wrap; font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.4; color: #333; background: #f8f9fa; padding: 15px; border-radius: 5px; overflow-x: auto;">${text}</pre>`;
+                  }
+                })
+                .catch(() => {
+                  const el = modal.querySelector('.file-preview-text');
+                  if (el) {
+                    el.innerHTML = `<div style="padding: 20px; text-align: center; color: #6c757d;">File not found or cannot be loaded.<br><small>Path: ${file.content}</small></div>`;
+                  }
+                });
+            }
+            // Word/ZIP: show download link
+            else if (nameLower.endsWith('.doc') || nameLower.endsWith('.docx') || nameLower.endsWith('.zip')) {
+              content = `
+                <div class="file-preview-text">
+                  Preview not supported. 
+                  <a href="${file.content}" download style="color:#1976d2;">Download ${file.name}</a>
+                </div>
+              `;
+            }
+            // Fallback
+            else {
+              content = `<div class="file-preview-text"><a href="${file.content}" target="_blank" rel="noopener">Open ${file.name}</a></div>`;
+            }
+          } else {
+            content = `<div class="file-preview-text">${file.content}</div>`;
+          }
+          
+          modal.innerHTML = `
+            <div class="file-preview-content">
+              <div class="file-preview-header">
+                <h3>${file.name}</h3>
+                <button class="file-preview-close" onclick="this.closest('.file-preview-modal').remove()">×</button>
+              </div>
+              <div class="file-preview-body">
+                ${content}
+              </div>
+            </div>
+          `;
+          
+          document.body.appendChild(modal);
+          
+          // Close on background click
+          modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+              modal.remove();
+            }
+          });
+          
+          // Close on Escape key
+          document.addEventListener('keydown', function closeOnEscape(e) {
+            if (e.key === 'Escape') {
+              modal.remove();
+              document.removeEventListener('keydown', closeOnEscape);
+            }
+          });
+        }
+
+        function refreshView() {
+          updateFileExplorerView();
+        }
+
+        // Make functions globally available
+        window.navigateToFolder = navigateToFolder;
+        window.goBack = goBack;
+        window.goForward = goForward;
+        window.goUp = goUp;
+        window.refreshView = refreshView;
+        window.handleFileClick = handleFileClick;
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+          const fileExplorer = document.getElementById('fileExplorerWindow');
+          if (!fileExplorer || !fileExplorer.classList.contains('show')) return;
+          
+          switch(e.key) {
+            case 'Backspace':
+              e.preventDefault();
+              goUp();
+              break;
+            case 'ArrowLeft':
+              if (e.altKey) {
+                e.preventDefault();
+                goBack();
+              }
+              break;
+            case 'ArrowRight':
+              if (e.altKey) {
+                e.preventDefault();
+                goForward();
+              }
+              break;
+            case 'F5':
+              e.preventDefault();
+              refreshView();
+              break;
+          }
+        });
+
+        // Initialize File Explorer properly when opened
+        const originalToggleWindow = window.toggleWindow;
+        window.toggleWindow = function(windowId) {
+          originalToggleWindow(windowId);
+          if (windowId === 'fileExplorerWindow') {
+            // Reset to desktop when opening
+            setTimeout(() => {
+              currentPath = ['desktop'];
+              navigationHistory = [['desktop']];
+              historyIndex = 0;
+              updateFileExplorerView();
+              updateNavigationButtons();
+              updateAddressBar();
+              updateSidebarActiveState();
+            }, 100);
+          }
+        };
+
+        // Search functionality
+        function openSearchModal() {
+          const modal = document.createElement('div');
+          modal.className = 'file-preview-modal';
+          modal.innerHTML = `
+            <div class="file-preview-content" style="max-width: 500px;">
+              <div class="file-preview-header">
+                <h3>Search Files</h3>
+                <button class="file-preview-close" onclick="this.closest('.file-preview-modal').remove()">×</button>
+              </div>
+              <div class="file-preview-body">
+                <input type="text" id="searchInput" placeholder="Enter file name..." style="
+                  width: 100%;
+                  padding: 10px;
+                  border: 1px solid #ced4da;
+                  border-radius: 4px;
+                  font-size: 14px;
+                  margin-bottom: 15px;
+                ">
+                <div id="searchResults" style="max-height: 300px; overflow-y: auto;"></div>
+              </div>
+            </div>
+          `;
+          
+          document.body.appendChild(modal);
+          
+          const searchInput = document.getElementById('searchInput');
+          const searchResults = document.getElementById('searchResults');
+          
+          searchInput.focus();
+          
+          searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            if (searchTerm.length < 2) {
+              searchResults.innerHTML = '<p style="color: #6c757d; text-align: center;">Type at least 2 characters to search</p>';
+              return;
+            }
+            
+            const results = searchAllFiles(searchTerm);
+            if (results.length === 0) {
+              searchResults.innerHTML = '<p style="color: #6c757d; text-align: center;">No files found</p>';
+            } else {
+              searchResults.innerHTML = results.map(result => `
+                <div style="
+                  padding: 10px;
+                  border-bottom: 1px solid #eee;
+                  cursor: pointer;
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                " onclick="navigateToSearchResult('${result.path.join('/')}', '${result.key}')">
+                  <i class="fa-solid ${result.icon}" style="color: ${result.color};"></i>
+                  <div>
+                    <div style="font-weight: bold;">${result.name}</div>
+                    <div style="font-size: 12px; color: #6c757d;">${result.path.join(' > ')}</div>
+                  </div>
+                </div>
+              `).join('');
+            }
+          });
+          
+          // Close on background click
+          modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+              modal.remove();
+            }
+          });
+        }
+
+        function searchAllFiles(searchTerm) {
+          const results = [];
+          
+          function searchInFolder(folder, path) {
+            if (!folder.children) return;
+            
+            Object.entries(folder.children).forEach(([key, item]) => {
+              if (item.name.toLowerCase().includes(searchTerm)) {
+                results.push({
+                  name: item.name,
+                  path: [...path, folder.name],
+                  key: key,
+                  icon: getFileIcon(item),
+                  color: getFileColor(item)
+                });
+              }
+              
+              if (item.type === 'folder' && item.children) {
+                searchInFolder(item, [...path, folder.name]);
+              }
+            });
+          }
+          
+          Object.entries(fileSystem).forEach(([key, folder]) => {
+            searchInFolder(folder, []);
+          });
+          
+          return results;
+        }
+
+        function getFileColor(file) {
+          if (file.type === 'folder') return '#ffc107';
+          if (file.type === 'image') return '#4caf50';
+          if (file.type === 'video') return '#f44336';
+          if (file.type === 'audio') return '#9c27b0';
+          if (file.type === 'certificate') return '#9c27b0';
+          if (file.type === 'resume') return '#f44336';
+          if (file.type === 'document') {
+            if (file.name.includes('.pdf')) return '#f44336';
+            return '#2196f3';
+          }
+          return '#6c757d';
+        }
+
+        function navigateToSearchResult(pathArray, fileKey) {
+          // Close search modal
+          document.querySelector('.file-preview-modal').remove();
+          
+          // Navigate to the folder containing the file
+          const folderPath = pathArray.slice(1); // Remove root folder name
+          currentPath = ['desktop', ...folderPath];
+          
+          // Update history
+          navigationHistory = [['desktop'], [...currentPath]];
+          historyIndex = 1;
+          
+          updateFileExplorerView();
+          updateNavigationButtons();
+          updateAddressBar();
+          updateSidebarActiveState();
+          
+          // Highlight the found file
+          setTimeout(() => {
+            const fileItems = document.querySelectorAll('.file-item');
+            fileItems.forEach(item => {
+              if (item.querySelector('span').textContent === fileKey) {
+                item.classList.add('selected');
+                item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            });
+          }, 100);
+        }
+
+        // Make search function globally available
+        window.openSearchModal = openSearchModal;
+
+        function navigateToRootFolder(folderName) {
+          // Navigate to root-level folders
+          const newPath = [folderName];
+          const targetFolder = getFolderByPath(newPath);
+          
+          if (!targetFolder || targetFolder.type !== 'folder') {
+            console.error('Invalid root folder path:', newPath);
+            return;
+          }
+
+          currentPath = newPath;
+          
+          // Add to history
+          if (historyIndex < navigationHistory.length - 1) {
+            navigationHistory = navigationHistory.slice(0, historyIndex + 1);
+          }
+          navigationHistory.push([...newPath]);
+          historyIndex = navigationHistory.length - 1;
+          
+          updateFileExplorerView();
+          updateNavigationButtons();
+          updateAddressBar();
+          updateSidebarActiveState();
+        }
+
+        // Make functions globally available
+        window.navigateToFolder = navigateToFolder;
+        window.navigateToRootFolder = navigateToRootFolder;
+        window.goBack = goBack;
+        window.goForward = goForward;
+        window.goUp = goUp;
+        window.refreshView = refreshView;
+        window.handleFileClick = handleFileClick;
+        window.openSearchModal = openSearchModal;
     </script>
 
     <!-- Shutdown Screen Overlay -->
     <div id="shutdown-screen" style="display:none;">
-    <div class="shutdown-message">Shutting down...</div>
+        <div class="shutdown-message">
+            <div class="shutdown-icon">🔌</div>
+            <div class="shutdown-text">Shutting down...</div>
+            <div class="shutdown-progress">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
     </div>
 
 </body>

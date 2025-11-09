@@ -1,0 +1,23 @@
+[
+  {
+    "title": "B.Tech Computer Science and Business System",
+    "institution": "Saranathan College of Engineering, Trichy",
+    "year": "2023 - Present",
+    "description": "Currently pursuing B.Tech in Computer Science and Business System.",
+    "type": "College"
+  },
+  {
+    "title": "12th Grade (CBSE)",
+    "institution": "SBIOA CBSE School",
+    "year": "Completed in 2023",
+    "description": "Completed 12th grade with CBSE curriculum.",
+    "type": "School"
+  },
+  {
+    "title": "10th Grade (CBSE)",
+    "institution": "SBIOA CBSE School",
+    "year": "Completed in 2021",
+    "description": "Completed 10th grade with CBSE curriculum.",
+    "type": "School"
+  }
+] 
